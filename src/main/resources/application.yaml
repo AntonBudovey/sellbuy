@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: iti0302-2024-backend
+  liquibase:
+    enabled: true
+    change-log: classpath:liquibase/changelog-master.yaml
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: bestuser
