@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -23,7 +24,12 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "users_id_seq")
+    @SequenceGenerator(name = "users_id_seq",
+            sequenceName = "users_id_seq",
+            allocationSize = 1)
+
     private Long id;
 
     @Column(name = "username", unique = true, nullable = false)
@@ -36,7 +42,9 @@ public class User {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
     private Set<Role> roles;
 
