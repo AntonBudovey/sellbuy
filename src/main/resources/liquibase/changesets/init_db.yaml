@@ -61,15 +61,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: soldOut
+                  name: sold_out
                   type: boolean
                   constraints:
                     nullable: false
               - column:
                   name: user_id
                   type: bigint
-                  constraints:
-                    nullable: false
 
   - changeSet:
       id: create_reviews_table
@@ -97,8 +95,6 @@ databaseChangeLog:
               - column:
                   name: product_id
                   type: bigint
-                  constraints:
-                    nullable: false
 
   - changeSet:
       id: create_users_roles_table
