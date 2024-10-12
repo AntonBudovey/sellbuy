@@ -81,6 +81,18 @@ public class Iti03022024BackendApplication {
 
             reviewService.createReview(review2, 1L);
 
+            Review review3 = new Review();
+            review3.setRating(3.0);
+            review3.setText("test review3");
+
+            reviewService.createReview(review3, 2L);
+
+            Review review4 = new Review();
+            review4.setRating(2.0);
+            review4.setText("test review4");
+
+            reviewService.createReview(review4, 3L);
+
 
 
 

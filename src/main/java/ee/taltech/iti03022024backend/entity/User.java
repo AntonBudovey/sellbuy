@@ -48,6 +48,7 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private Set<Role> roles;
 
+
     @OneToMany(mappedBy = "user")
     private Set<Product> products;
 }

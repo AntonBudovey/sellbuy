@@ -1,10 +1,15 @@
 version: "3.8"
 services:
+  backend:
+    build: .
+    container_name: iti0302-2024-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
   postgres:
     container_name: iti0302-2024-backend-postgres
     image: postgres
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: bestuser
