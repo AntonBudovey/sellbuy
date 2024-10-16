@@ -27,6 +27,8 @@ build:
 
 push:
   stage: push
+  before_script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   script:
     # Push the Docker image to DockerHub
     - docker push "$DOCKER_IMAGE"
