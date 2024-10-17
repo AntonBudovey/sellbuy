@@ -3,6 +3,7 @@ services:
   backend:
     build: .
     container_name: iti0302-2024-backend
+    env_file: .env
     ports:
       - "8080:8080"
     depends_on:
@@ -11,5 +12,5 @@ services:
     container_name: iti0302-2024-backend-postgres
     image: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: bestuser
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

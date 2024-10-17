@@ -18,8 +18,6 @@ before_script:
 build:
   stage: build
   script:
-    # Login to DockerHub using GitLab CI environment variables
-    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     # Build the Docker image from the Dockerfile in the current directory
     - docker build -t "$DOCKER_IMAGE" .
     # Tag the Docker image with the current commit SHA for versioning
@@ -27,15 +25,11 @@ build:
 
 push:
   stage: push
-  before_script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   script:
+    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     # Push the Docker image to DockerHub
-    - docker push "$DOCKER_IMAGE"
-    # Push the image tagged with the commit SHA
-    - docker push "$DOCKER_IMAGE:$(echo $CI_COMMIT_SHA)"
-  only:
-    - main  # Adjust this to your main branch or whichever branch you want to push from
+    - docker push "$DOCKER_IMAGE:latest"
+    - docker push "$DOCKER_IMAGE:$CI_COMMIT_SHA"
 
 deploy:
   stage: deploy
@@ -47,6 +41,4 @@ deploy:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - ssh -o StrictHostKeyChecking=no $ubuntu@$SERVER_IP "cd /home/ubuntu && docker-compose down && docker-compose pull && docker-compose up -d --remove-orphans"
-  only:
-    - main
+    - ssh -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu && docker-compose down && docker-compose pull && docker-compose up -d --remove-orphans"
