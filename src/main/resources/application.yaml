@@ -1,10 +1,12 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: iti0302-2024-backend
   liquibase:
     enabled: true
     change-log: classpath:liquibase/changelog-master.yaml
   datasource:
-    url: jdbc:postgresql://postgres:5432/postgres
-    username: postgres
-    password: bestuser
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/postgres
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
