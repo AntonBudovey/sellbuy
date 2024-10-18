@@ -11,7 +11,15 @@ Before you begin, make sure you have the following installed on your machine:
 
 ## Getting Started
 
-Follow these steps to set up and run the Docker containers for this project.
+Before you start, you need to create a file in project root directory `.env` containing:<br>
+`POSTGRES_USERNAME=postgres`<br>
+`POSTGRES_PASSWORD=bestuser`<br>
+`POSTGRES_HOST=postgres` (if you want to use a Docker)<br> 
+
+You can use your own username and password.<br>
+If you want to run application without Docker with your own database so use `POSTGRES_HOST=localhost`
+
+
 
 ### Step 1: Install Docker
 
