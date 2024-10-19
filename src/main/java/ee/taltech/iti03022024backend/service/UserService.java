@@ -6,6 +6,8 @@ import ee.taltech.iti03022024backend.web.dto.UserDto;
 public interface UserService {
 
     User createUser(User user);
+    UserDto register(UserDto userDto);
+    UserDto login(String username, String password);
     User updateUser(User user);
     void deleteUser(Long id);
 
