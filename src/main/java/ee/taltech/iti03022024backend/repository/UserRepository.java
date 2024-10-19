@@ -23,5 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = {"products"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<User> findWithProductsById(Long id);
 
-    Optional<User> findByUsername(String username);
+    User findByUsername(String username);
+    boolean existsByUsername(String username);
 }

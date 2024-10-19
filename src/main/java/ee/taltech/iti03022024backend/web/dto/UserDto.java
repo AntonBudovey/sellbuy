@@ -9,8 +9,8 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 public class UserDto {
-    @NotNull(message = "id cannot be null", groups = {OnUpdate.class})
-    private Long id;
+//    @NotNull(message = "id cannot be null", groups = {OnUpdate.class})
+//    private Long id;
 
     @NotNull(message = "username cannot be null", groups = {OnUpdate.class, OnCreate.class})
     @Length(max=255, message = "Username cannot be longer than 255 characters",
@@ -26,10 +26,10 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotNull(message = "confirmPassword cannot be null", groups = {OnCreate.class})
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String confirmPassword;
+//    @NotNull(message = "confirmPassword cannot be null", groups = {OnCreate.class})
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    private String confirmPassword;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Double commonRating;
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    private Double commonRating;
 }
