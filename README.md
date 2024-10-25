@@ -19,6 +19,13 @@ Before you start, you need to create a file in project root directory `.env` con
 You can use your own username and password.<br>
 If you want to run application without Docker with your own database so use `POSTGRES_HOST=localhost`
 
+## How to build app
+From app root directory write command:
+     ```bash
+    mvn clean package
+    ```
+## How to start application
+Execute Iti03022024BackendApplication.jar file
 
 
 ### Step 1: Install Docker
