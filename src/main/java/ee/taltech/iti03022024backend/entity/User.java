@@ -16,10 +16,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -54,7 +56,12 @@ public class User implements UserDetails {
 
 
     @OneToMany(mappedBy = "user")
-    private Set<Product> products;
+    @ToString.Exclude
+    private List<Product> products;
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private List<Review> reviews;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

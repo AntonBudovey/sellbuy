@@ -20,6 +20,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 """, nativeQuery = true)
     void assignReviewToProduct(@Param("reviewId") Long reviewId, @Param("productId") Long productId);
 
+    @Modifying
+    @Query(value = """
+    UPDATE reviews
+    SET user_id = :userId
+    WHERE id = :reviewId
+""", nativeQuery = true)
+    void assignReviewToUser(@Param("reviewId") Long reviewId, @Param("userId") Long userId);
+
     @Query(value = """
     SELECT p.reviews
     FROM Product p

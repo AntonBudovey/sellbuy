@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_blocked_jwt_table
+      author: Anton
+      changes:
+        - createTable:
+            tableName: blocked_jwt
+            columns:
+              - column:
+                  name: token_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: expires_at
+                  type: datetime
+                  constraints:
+                    nullable: false

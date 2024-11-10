@@ -8,6 +8,7 @@ import ee.taltech.iti03022024backend.web.dto.validation.OnUpdate;
 import ee.taltech.iti03022024backend.web.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +30,7 @@ public class UserController {
 
 
     @PutMapping
+    @PreAuthorize("@customSecurityExpression.canAccessUser(#dto.id)")
     public UserDto updateUser(@Validated(OnUpdate.class) @RequestBody UserDto dto) {
         User user = userService.updateUser(userMapper.toEntity(dto));
         return userMapper.toDto(user);
@@ -36,13 +38,14 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
+        User user = userService.getUserByIdWithProducts(id);
         UserDto userDto = userMapper.toDto(user);
         userDto.setCommonRating(userService.getCommonRatingForUser(id));
         return userDto;
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@customSecurityExpression.canAccessUser(#id)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);

@@ -1,3 +1,4 @@
 databaseChangeLog:
-  - include:
-      file: 'liquibase/changesets/init_db.yaml'
+  - includeAll:
+      path: /changesets
+      relativeToChangeLogFile: true

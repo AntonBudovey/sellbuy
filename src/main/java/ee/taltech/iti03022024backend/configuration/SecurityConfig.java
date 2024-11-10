@@ -1,7 +1,10 @@
 package ee.taltech.iti03022024backend.configuration;
 
+import ee.taltech.iti03022024backend.repository.BlockedJwtRepository;
 import ee.taltech.iti03022024backend.security.JwtTokenFilter;
+import ee.taltech.iti03022024backend.security.LogoutJwtTokenFilter;
 import ee.taltech.iti03022024backend.security.jwt.JwtTokenProvider;
+import ee.taltech.iti03022024backend.service.BlockedJwtService;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -30,6 +33,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final JwtTokenProvider tokenProvider;
+    private final BlockedJwtRepository blockedJwtRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,7 +65,8 @@ public class SecurityConfig {
                                 "v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(tokenProvider, blockedJwtRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new LogoutJwtTokenFilter(blockedJwtRepository, tokenProvider), JwtTokenFilter.class);
         return http.build();
     };
 

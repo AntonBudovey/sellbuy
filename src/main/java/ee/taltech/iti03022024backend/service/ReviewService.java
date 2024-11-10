@@ -1,6 +1,7 @@
 package ee.taltech.iti03022024backend.service;
 
 import ee.taltech.iti03022024backend.entity.Review;
+import ee.taltech.iti03022024backend.exception.ResourceNotFoundException;
 import ee.taltech.iti03022024backend.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,14 @@ import java.util.List;
 @Service
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private ProductService productService;
 
 
     @Transactional
-    public Review createReview(Review review, Long productId) {
+    public Review createReview(Review review, Long productId, Long userId) {
         Review createdReview = reviewRepository.save(review);
         reviewRepository.assignReviewToProduct(createdReview.getId(), productId);
+        reviewRepository.assignReviewToUser(createdReview.getId(), userId);
         return createdReview;
     }
 
@@ -30,8 +33,11 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public List<Review> getAllReviewsByProductId(Long productId) {
-        return reviewRepository.findAllByProductId(productId);
-    }
+        if (!productService.existsById(productId)) {
+            throw new ResourceNotFoundException("Product with id " + productId + " not found");
+        }
+            return reviewRepository.findAllByProductId(productId);
+        }
 
 
     @Transactional

@@ -2,6 +2,7 @@ package ee.taltech.iti03022024backend.security.jwt;
 
 import ee.taltech.iti03022024backend.entity.User;
 import ee.taltech.iti03022024backend.entity._enum.Role;
+import ee.taltech.iti03022024backend.repository.BlockedJwtRepository;
 import ee.taltech.iti03022024backend.security.jwt.props.JwtProperties;
 import ee.taltech.iti03022024backend.service.UserService;
 import ee.taltech.iti03022024backend.web.dto.jwt.JwtResponse;
@@ -25,6 +26,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
+    private final BlockedJwtRepository blockedJwtRepository;
 
     private final UserDetailsService userDetailsService;
     private final UserService userService;
@@ -45,12 +48,14 @@ public class JwtTokenProvider {
     public String createAccessToken(
             final Long userId,
             final String username,
-            final Set<Role> roles
+            final Set<Role> roles,
+            final UUID tokenId
     ) {
         Claims claims = Jwts.claims()
                 .subject(username)
                 .add("id", userId)
                 .add("roles", resolveRoles(roles))
+                .add("tokenId", tokenId)
                 .build();
         Instant validity = Instant.now()
                 .plus(jwtProperties.getAccess(), ChronoUnit.HOURS);
@@ -71,11 +76,13 @@ public class JwtTokenProvider {
 
     public String createRefreshToken(
             final Long userId,
-            final String username
+            final String username,
+            final UUID tokenId
     ) {
         Claims claims = Jwts.claims()
                 .subject(username)
                 .add("id", userId)
+                .add("tokenId", tokenId)
                 .build();
         Instant validity = Instant.now()
                 .plus(jwtProperties.getRefresh(), ChronoUnit.DAYS);
@@ -95,11 +102,12 @@ public class JwtTokenProvider {
         }
         Long userId = getId(refreshToken);
         User user = userService.getUserById(userId);
+        UUID tokenId = UUID.randomUUID();
         jwtResponse.setAccessToken(
-                createAccessToken(userId, user.getUsername(), user.getRoles())
+                createAccessToken(userId, user.getUsername(), user.getRoles(), tokenId)
         );
         jwtResponse.setRefreshToken(
-                createRefreshToken(userId, user.getUsername())
+                createRefreshToken(userId, user.getUsername(), tokenId)
         );
         return jwtResponse;
     }
@@ -107,6 +115,9 @@ public class JwtTokenProvider {
     public boolean isValid (
             final String token
     ) {
+        if (blockedJwtRepository.existsByTokenId(UUID.fromString(getTokenId(token)))) {
+            return false;
+        }
         Jws<Claims> claims = Jwts
                 .parser()
                 .verifyWith(key)
@@ -155,4 +166,13 @@ public class JwtTokenProvider {
         );
     }
 
+    public String getTokenId(String token) {
+        return Jwts
+                .parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("tokenId", String.class);
+    }
 }

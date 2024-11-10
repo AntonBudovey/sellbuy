@@ -1,6 +1,7 @@
 package ee.taltech.iti03022024backend.security;
 
 import ee.taltech.iti03022024backend.exception.ResourceNotFoundException;
+import ee.taltech.iti03022024backend.repository.BlockedJwtRepository;
 import ee.taltech.iti03022024backend.security.jwt.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,6 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtTokenFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
+    private final BlockedJwtRepository blockedJwtRepository;
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String bearerToken = ((HttpServletRequest)servletRequest).getHeader("Authorization");

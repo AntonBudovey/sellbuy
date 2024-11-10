@@ -57,6 +57,12 @@ public class ControllerAdvice {
         return new ExceptionBody("Authentication failed");
     }
 
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionBody handleAccessDeniedException() {
+        return new ExceptionBody("Access denied");
+    }
+
     @ExceptionHandler(ConstraintException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionBody handleConstraintException(ConstraintException e) {
