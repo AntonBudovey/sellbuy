@@ -22,6 +22,8 @@ build:
     - docker build -t "$DOCKER_IMAGE" .
     # Tag the Docker image with the current commit SHA for versioning
     - docker tag "$DOCKER_IMAGE" "$DOCKER_IMAGE:$(echo $CI_COMMIT_SHA)"
+  only:
+    - main
 
 push:
   stage: push
@@ -30,6 +32,8 @@ push:
     # Push the Docker image to DockerHub
     - docker push "$DOCKER_IMAGE:latest"
     - docker push "$DOCKER_IMAGE:$CI_COMMIT_SHA"
+  only:
+    - main
 
 deploy:
   stage: deploy
@@ -42,6 +46,5 @@ deploy:
     - chmod 700 ~/.ssh
   script:
     - ssh -o StrictHostKeyChecking=no ubuntu@$SERVER_IP "cd /home/ubuntu && docker-compose down && docker-compose pull && docker-compose up -d --remove-orphans"
-
-only:
-  - main
+  only:
+    - main
