@@ -19,10 +19,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     WHERE p.user.id = :userId
 """)
     Double getUserRatingByUserId(@Param("userId") Long userId);
-
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.products WHERE u.id = :id")
     @EntityGraph(attributePaths = {"products"}, type = EntityGraph.EntityGraphType.LOAD)
-    Optional<User> findWithProductsById(Long id);
+    Optional<User> findWithProductsById(@Param("id") Long id);
 
-    User findByUsername(String username);
-    boolean existsByUsername(String username);
+    Optional<User> findByUsername(String username);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.reviews WHERE u.id = :id")
+    @EntityGraph(attributePaths = {"reviews"}, type = EntityGraph.EntityGraphType.LOAD)
+    Optional<User> findWithReviewsById(Long id);
 }

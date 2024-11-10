@@ -95,6 +95,9 @@ databaseChangeLog:
               - column:
                   name: product_id
                   type: bigint
+              - column:
+                  name: user_id
+                  type: bigint
 
   - changeSet:
       id: create_users_roles_table
@@ -144,6 +147,15 @@ databaseChangeLog:
             baseColumnNames: product_id
             constraintName: fk_reviews_products
             referencedTableName: products
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: NO ACTION
+
+        - addForeignKeyConstraint:
+            baseTableName: reviews
+            baseColumnNames: user_id
+            constraintName: fk_reviews_users
+            referencedTableName: users
             referencedColumnNames: id
             onDelete: CASCADE
             onUpdate: NO ACTION

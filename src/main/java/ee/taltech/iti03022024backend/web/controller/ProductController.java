@@ -11,7 +11,10 @@ import ee.taltech.iti03022024backend.web.mapper.ProductMapper;
 import ee.taltech.iti03022024backend.web.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,15 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/v1/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
 
-    @PostMapping("/{userId}")
+    @PostMapping()
     ProductDto createProduct(@Validated(OnCreate.class) @RequestBody ProductDto dto
-            , @PathVariable Long userId) {
+            , Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
         Product product = productMapper.toEntity(dto);
         Product createdProduct = productService.createProduct(product, userId);
 
@@ -41,6 +46,7 @@ public class ProductController {
     }
 
     @PutMapping
+    @PreAuthorize("@customSecurityExpression.canAccessProduct(#dto.id)")
     ProductDto updateProduct(@Validated(OnUpdate.class) @RequestBody ProductDto dto) {
         Product product = productMapper.toEntity(dto);
         Product updatedProduct = productService.updateProduct(product);
@@ -56,6 +62,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("@customSecurityExpression.canAccessProduct(#id)")
     void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
     }

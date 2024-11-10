@@ -10,3 +10,15 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST}:5432/postgres
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
+
+security:
+  jwt:
+    access: 1
+    refresh: 1
+    secret: ${JWT_SECRET}
+
+logging:
+  level:
+    org.springframework.security: trace
+
+
