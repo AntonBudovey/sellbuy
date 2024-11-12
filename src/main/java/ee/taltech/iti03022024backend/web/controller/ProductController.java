@@ -9,6 +9,8 @@ import ee.taltech.iti03022024backend.web.dto.pagination.ProductSearchCriteria;
 import ee.taltech.iti03022024backend.web.dto.validation.OnCreate;
 import ee.taltech.iti03022024backend.web.dto.validation.OnUpdate;
 import ee.taltech.iti03022024backend.web.mapper.ProductMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -31,11 +33,14 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/v1/products")
 @RequiredArgsConstructor
+@Validated
+@Tag(name = "Product controller", description = "Product API")
 public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
 
     @PostMapping()
+    @Operation(summary = "create new product and as owner login user")
     ProductDto createProduct(@Validated(OnCreate.class) @RequestBody ProductDto dto
             , Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
@@ -46,6 +51,7 @@ public class ProductController {
     }
 
     @PutMapping
+    @Operation(summary = "update product(can product owner and admin)")
     @PreAuthorize("@customSecurityExpression.canAccessProduct(#dto.id)")
     ProductDto updateProduct(@Validated(OnUpdate.class) @RequestBody ProductDto dto) {
         Product product = productMapper.toEntity(dto);
@@ -55,6 +61,7 @@ public class ProductController {
     }
 
     @GetMapping
+    @Operation(summary = "get all products with sorting and pagination")
     PageResponse<ProductDto> getAllProducts(@ModelAttribute ProductSearchCriteria criteria) {
         Page<Product> products = productService.getAllProducts(criteria);
         Page<ProductDto> productPages = products.map(productMapper::toDto);
@@ -66,6 +73,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "delete product(can product owner and admin)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("@customSecurityExpression.canAccessProduct(#id)")
     void deleteProduct(@PathVariable Long id) {

@@ -5,12 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-//@Schema(description = "Login request")
+@Schema(description = "Login request")
 public class JwtRequest {
     @NotNull(message = "Username cannot be null")
-//    @Schema(description = "Username", example = "anbudo@taltech.ee")
+    @Schema(description = "Username", example = "anton")
     private String username;
     @NotNull(message = "Password cannot be null")
-//    @Schema(description = "Password", example = "1")
+    @Schema(description = "Password", example = "1")
     private String password;
 }
