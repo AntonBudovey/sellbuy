@@ -62,7 +62,8 @@ public class SecurityConfig {
                     });})
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**",
                                 "/swagger-ui/**",
-                                "v3/api-docs/**").permitAll()
+                                "v3/api-docs/**",
+                        "/api/v1/products").permitAll()
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider, blockedJwtRepository), UsernamePasswordAuthenticationFilter.class)

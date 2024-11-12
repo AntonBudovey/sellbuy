@@ -102,7 +102,7 @@ public class JwtTokenProvider {
         }
         Long userId = getId(refreshToken);
         User user = userService.getUserById(userId);
-        UUID tokenId = UUID.randomUUID();
+        UUID tokenId = UUID.fromString(getTokenId(refreshToken));
         jwtResponse.setAccessToken(
                 createAccessToken(userId, user.getUsername(), user.getRoles(), tokenId)
         );

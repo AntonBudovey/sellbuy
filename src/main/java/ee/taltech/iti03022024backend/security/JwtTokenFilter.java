@@ -3,6 +3,7 @@ package ee.taltech.iti03022024backend.security;
 import ee.taltech.iti03022024backend.exception.ResourceNotFoundException;
 import ee.taltech.iti03022024backend.repository.BlockedJwtRepository;
 import ee.taltech.iti03022024backend.security.jwt.JwtTokenProvider;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -33,7 +34,7 @@ public class JwtTokenFilter extends GenericFilterBean {
                     if (authentication != null) {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
-                } catch (UsernameNotFoundException ignored) {}
+                } catch (UsernameNotFoundException | ExpiredJwtException ignored) {}
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);

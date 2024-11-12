@@ -1,5 +1,6 @@
 package ee.taltech.iti03022024backend;
 
+import com.github.javafaker.Faker;
 import ee.taltech.iti03022024backend.entity.Product;
 import ee.taltech.iti03022024backend.entity.Review;
 import ee.taltech.iti03022024backend.entity.User;
@@ -23,16 +24,26 @@ import java.util.Set;
 public class Iti03022024BackendApplication {
     private final UserRepository userRepository;
     private final ProductService productService;
+    private final ProductRepository productRepository;
     private final ReviewService reviewService;
 
     public static void main(String[] args) {
         SpringApplication.run(Iti03022024BackendApplication.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner startup() {
-//
-//        return args -> {
+    @Bean
+    public CommandLineRunner startup() {
+
+        return args -> {
+//            Faker faker = new Faker();
+//            for (int i = 0; i < 50; i++) {
+//                Product product = new Product();
+//                product.setPrice((double) i);
+//                product.setTitle(faker.book().title());
+//                product.setDescription(faker.chuckNorris().fact());
+//                product.setSoldOut(false);
+//                productRepository.save(product);
+//            }
 //            if (userRepository.findByUsername("nikita").isEmpty()) {
 //
 //                User user = new User();
@@ -95,13 +106,13 @@ public class Iti03022024BackendApplication {
 //                reviewService.createReview(review4, 3L, 2L);
 //            }
 //
-//
-//
-//
-//
-//
-//
-//        };
-//    }
+
+
+
+
+
+
+        };
+    }
 
 }
