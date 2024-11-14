@@ -35,15 +35,15 @@ public class Iti03022024BackendApplication {
     public CommandLineRunner startup() {
 
         return args -> {
-//            Faker faker = new Faker();
-//            for (int i = 0; i < 50; i++) {
-//                Product product = new Product();
-//                product.setPrice((double) i);
-//                product.setTitle(faker.book().title());
-//                product.setDescription(faker.chuckNorris().fact());
-//                product.setSoldOut(false);
-//                productRepository.save(product);
-//            }
+            Faker faker = new Faker();
+            for (int i = 0; i < 50; i++) {
+                Product product = new Product();
+                product.setPrice((double) i);
+                product.setTitle(faker.book().title());
+                product.setDescription(faker.chuckNorris().fact());
+                product.setSoldOut(false);
+                productRepository.save(product);
+            }
 //            if (userRepository.findByUsername("nikita").isEmpty()) {
 //
 //                User user = new User();
