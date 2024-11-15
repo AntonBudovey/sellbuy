@@ -12,6 +12,7 @@ spring:
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
 
+
 security:
   jwt:
     access: 1
@@ -22,4 +23,6 @@ logging:
   level:
     org.springframework.security: trace
 
+server:
+  port: 8083
 
