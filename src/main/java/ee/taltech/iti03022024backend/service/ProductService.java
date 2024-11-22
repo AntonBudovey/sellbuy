@@ -41,6 +41,12 @@ public class ProductService{
         return productRepository.findWithReviewsById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
     }
+
+    @Transactional(readOnly = true)
+    public Product getProductByIdWithCategories(Long id) {
+        return productRepository.findWithCategoriesById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
+    }
     @Transactional
     public Product updateProduct(Product product) {
         if (!productRepository.existsById(product.getId())) {

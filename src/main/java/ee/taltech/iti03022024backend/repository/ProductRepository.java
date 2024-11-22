@@ -30,4 +30,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     WHERE id = :productId
 """, nativeQuery = true)
     void assignProductToUser(@Param("productId")  Long productId, @Param("userId") Long userId);
+
+    @EntityGraph(attributePaths = {"categories"}, type = EntityGraph.EntityGraphType.LOAD)
+    Optional<Product> findWithCategoriesById(Long id);
 }

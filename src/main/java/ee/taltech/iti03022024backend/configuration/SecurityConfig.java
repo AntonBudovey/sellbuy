@@ -60,12 +60,13 @@ public class SecurityConfig {
                         response.setStatus(HttpStatus.FORBIDDEN.value());
                         response.getWriter().write("Unauthorized");
                     });})
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**",
-                                "/swagger-ui/**",
-                                "v3/api-docs/**",
-                        "/api/v1/products",
-                                "/api/v1/categories").permitAll()
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(request -> request
+//                        .requestMatchers("/api/v1/auth/**",
+//                                "/swagger-ui/**",
+//                                "v3/api-docs/**",
+//                        "/api/v1/products",
+//                                "/api/v1/categories").permitAll()
+                        .anyRequest().permitAll())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider, blockedJwtRepository), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new LogoutJwtTokenFilter(blockedJwtRepository, tokenProvider), JwtTokenFilter.class);
