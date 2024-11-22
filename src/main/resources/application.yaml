@@ -20,8 +20,11 @@ security:
     secret: ${JWT_SECRET}
 
 logging:
+  file:
+    name: logFile
   level:
     org.springframework.security: trace
 
-#server:
-#  port: 8083
+
+server:
+  port: 8084
