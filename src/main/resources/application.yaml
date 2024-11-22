@@ -6,7 +6,7 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:liquibase/changelog-master.yaml
-    drop-first: true
+    drop-first: ${DEBUG}
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:5432/postgres
     username: ${POSTGRES_USERNAME}
@@ -23,6 +23,6 @@ logging:
   level:
     org.springframework.security: trace
 
-server:
-  port: 8083
+#server:
+#  port: 8083
 
