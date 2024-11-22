@@ -2,7 +2,9 @@ package ee.taltech.iti03022024backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -20,10 +22,11 @@ public class Category {
     @Column(name = "category_name", nullable = false, unique = true)
     private String name;
 
-    @ManyToMany
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "product_categories"
             , joinColumns = @JoinColumn(name = "category_id")
-            , inverseJoinColumns = @JoinColumn(name = "products_id")
+            , inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private Set<Product> products;
+    private List<Product> products;
 }

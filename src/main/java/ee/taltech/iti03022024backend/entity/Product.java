@@ -2,6 +2,7 @@ package ee.taltech.iti03022024backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.Set;
 
@@ -36,7 +37,8 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<Review> reviews;
 
-    @ManyToMany
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "product_categories"
             , joinColumns = @JoinColumn(name = "product_id")
             , inverseJoinColumns = @JoinColumn(name = "category_id")

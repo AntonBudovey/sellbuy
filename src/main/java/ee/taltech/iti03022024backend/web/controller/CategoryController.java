@@ -56,4 +56,10 @@ public class CategoryController {
     void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
     }
+
+    @PostMapping("/{productId}/{categoryId}")
+    @Operation(summary = "add product to category")
+    void addProductToCategory(@PathVariable Long productId, @PathVariable Long categoryId) {
+        categoryService.addProductToCategory(productId, categoryId);
+    }
 }

@@ -1,10 +1,12 @@
 package ee.taltech.iti03022024backend;
 
 import com.github.javafaker.Faker;
+import ee.taltech.iti03022024backend.entity.Category;
 import ee.taltech.iti03022024backend.entity.Product;
 import ee.taltech.iti03022024backend.entity.Review;
 import ee.taltech.iti03022024backend.entity.User;
 import ee.taltech.iti03022024backend.entity._enum.Role;
+import ee.taltech.iti03022024backend.repository.CategoryRepository;
 import ee.taltech.iti03022024backend.repository.ProductRepository;
 import ee.taltech.iti03022024backend.repository.UserRepository;
 import ee.taltech.iti03022024backend.service.ProductService;
@@ -32,7 +34,7 @@ public class Iti03022024BackendApplication {
     }
 
     @Bean
-    public CommandLineRunner startup() {
+    public CommandLineRunner startup(CategoryRepository categoryRepository) {
 
         return args -> {
             Faker faker = new Faker();
@@ -44,6 +46,17 @@ public class Iti03022024BackendApplication {
                 product.setSoldOut(false);
                 productRepository.save(product);
             }
+            Product product = new Product();
+            product.setTitle("Hoodie");
+            product.setPrice(10d);
+            product.setSoldOut(false);
+            product.setId(51L);
+            productRepository.save(product);
+
+            Category category = new Category();
+            category.setId(1L);
+            category.setName("Clothing");
+            categoryRepository.save(category);
 //            if (userRepository.findByUsername("nikita").isEmpty()) {
 //
 //                User user = new User();
