@@ -1,13 +1,23 @@
 # Project README
 
-This project uses Docker for containerization. Follow the steps below to get your environment up and running using Docker Compose inside IntelliJ IDEA.
+the aim of that project is create to web service where people can buy and sell their stuff (like ebay or aliexpress)
+
+## Technology stack
+* Postgres Database 17.1
+* Data JPA
+* Liquibase
+* React
+* JJWT 0.12.6
+* Spring Boot
+* Java 21
+* Swagger 2.6.0
+* MapStruct 1.6.2
 
 ## Prerequisites
 
-Before you begin, make sure you have the following installed on your machine:
+Before you begin, make sure you have the following installed on your machine(if you want to dockerize app):
 
 - [Docker](https://www.docker.com/products/docker-desktop) (Docker Desktop for Windows/macOS, or Docker Engine for Linux)
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 
 ## Getting Started
 
@@ -15,37 +25,47 @@ Before you start, you need to create a file in project root directory `.env` con
 `POSTGRES_USERNAME=postgres`<br>
 `POSTGRES_PASSWORD=bestuser`<br>
 `POSTGRES_HOST=postgres` (if you want to use a Docker)<br> 
+`JWT_SECRET=kc ndjsfnvksdvkbfksd bksdbkbkfvb` (maybe any long random char sequence)<br>
+`DEBUG=false`<br>
 
 You can use your own username and password.<br>
 If you want to run application without Docker with your own database so use `POSTGRES_HOST=localhost`
 
-## How to build app
-From app root directory write command:
+### How to build  and run app
+1. Firstly clone app from gitlab
+2. make sure that your database is working
+3. From app root directory write command to build app:
      ```bash
-    mvn clean package
+    .\mvnw  clean package
     ```
-## How to start application
-Execute Iti03022024BackendApplication.jar file
+4. Then to start application 
+     ```bash
+    java -jar target/iti0302-2024-backend-0.0.1-SNAPSHOT.jar
+    ```
+Or you can just write this command
+     ```bash
+    .\mvnw spring-boot:run
+    ```
 
+### How to run docker container
 
-### Step 1: Install Docker
+## Step 1: Install Docker
 
 If you don’t have Docker installed, download and install Docker from the [official Docker website](https://www.docker.com/products/docker-desktop). Ensure that Docker is running after installation.
 
-### Step 2: Open the Project in IntelliJ IDEA
+## Step 2: Clone Project
 
-1. Open **IntelliJ IDEA** and navigate to the project directory.
-2. Make sure the project contains a `docker-compose.yaml` file in its root directory.
-
-### Step 3: Open IntelliJ Terminal
-
-1. In IntelliJ IDEA, open the terminal by selecting the **Terminal** tab at the bottom of the IDE.
+Clone project with ssh or https from gitlab repo
 
 
-### Step 4: Run Docker Compose
+## Step 3: Dockerize application
 
-1. In the IntelliJ terminal, ensure you are in the root directory of your project (where `docker-compose.yaml` is located).
-2. To start your Docker containers, run the following command:
+1. in root folder we have Dockerfile and docker_compose.yaml
+2. You can just build docker application container but it would be without database(you need your own working postgres)
+    ```bash
+    docker build .
+    ```
+2. To start your Docker containers with app and db, run the following command:
 
     ```bash
     docker-compose up
@@ -53,5 +73,5 @@ If you don’t have Docker installed, download and install Docker from the [offi
 
    This command will:
     - Build the Docker image (if required).
-    - Pull any necessary dependencies.
+    - import and start postgres db container
     - Start the containers as defined in the `docker-compose.yaml` file.
