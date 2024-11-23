@@ -4,7 +4,6 @@ import ee.taltech.iti03022024backend.repository.BlockedJwtRepository;
 import ee.taltech.iti03022024backend.security.JwtTokenFilter;
 import ee.taltech.iti03022024backend.security.LogoutJwtTokenFilter;
 import ee.taltech.iti03022024backend.security.jwt.JwtTokenProvider;
-import ee.taltech.iti03022024backend.service.BlockedJwtService;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -52,26 +51,28 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(handling -> {handling.authenticationEntryPoint((request, response, authException) -> {
-                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                    response.getWriter().write("Unauthorized");
-                });
+                .exceptionHandling(handling -> {
+                    handling.authenticationEntryPoint((request, response, authException) -> {
+                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                        response.getWriter().write("Unauthorized");
+                    });
                     handling.accessDeniedHandler((request, response, accessDeniedException) -> {
                         response.setStatus(HttpStatus.FORBIDDEN.value());
                         response.getWriter().write("Unauthorized");
-                    });})
+                    });
+                })
                 .authorizeHttpRequests(request -> request
-//                        .requestMatchers("/api/v1/auth/**",
-//                                "/swagger-ui/**",
-//                                "v3/api-docs/**",
-//                        "/api/v1/products",
-//                                "/api/v1/categories").permitAll()
-                        .anyRequest().permitAll())
+                        .requestMatchers("/api/v1/auth/**",
+                                "/swagger-ui/**",
+                                "v3/api-docs/**")
+                        .permitAll()
+                        .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider, blockedJwtRepository), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new LogoutJwtTokenFilter(blockedJwtRepository, tokenProvider), JwtTokenFilter.class);
         return http.build();
-    };
+    }
+
 
     @Bean
     public OpenAPI openAPI() {

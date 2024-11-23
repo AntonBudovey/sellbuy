@@ -13,13 +13,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class ProductService{
+public class ProductService {
     private final ProductRepository productRepository;
+
     @Transactional
     public Product createProduct(Product product, Long userId) {
         log.info("Attempting to create product for userId: {}", userId);
@@ -64,7 +63,7 @@ public class ProductService{
             Product product = productRepository.findWithReviewsById(id)
                     .orElseThrow(() -> {
                         log.warn("Product with given id {} not found", id);
-                        return new ResourceNotFoundException("Product with id " + id + " not found");
+                        return new ResourceNotFoundException("Product with id " + id + " not found in getProductById");
                     });
             log.info("Successfully fetched product with id: {}", id);
             return product;
@@ -83,8 +82,8 @@ public class ProductService{
         try {
             Product product = productRepository.findWithCategoriesById(id)
                     .orElseThrow(() -> {
-                        log.warn("Product with id {} not found", id);
-                        return new ResourceNotFoundException("Product with id " + id + " not found");
+                        log.warn("Product with id {} not found ", id);
+                        return new ResourceNotFoundException("Product with categories with id " + id + " not found in getProductByIdWithCategories");
                     });
             log.info("Successfully fetched product with categories for id: {}", id);
             return product;
@@ -102,7 +101,7 @@ public class ProductService{
         log.info("Attempting to update product with id: {}", product.getId());
         if (!productRepository.existsById(product.getId())) {
             log.warn("Product with id {} not found", product.getId());
-            throw new ResourceNotFoundException("Product with id " + product.getId() + " not found");
+            throw new ResourceNotFoundException("Product to update with id " + product.getId() + " not found");
         }
         try {
             Product updatedProduct = productRepository.save(product);
@@ -119,7 +118,7 @@ public class ProductService{
         log.info("Attempting to delete product with id: {}", id);
         if (!productRepository.existsById(id)) {
             log.warn("Product with id {} not found", id);
-            throw new ResourceNotFoundException("Product with id " + id + " not found");
+            throw new ResourceNotFoundException("Product to delete with id " + id + " not found");
         }
         try {
             productRepository.deleteById(id);

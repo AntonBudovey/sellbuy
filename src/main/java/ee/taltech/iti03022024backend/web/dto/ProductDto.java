@@ -15,12 +15,12 @@ public class ProductDto {
     private Long id;
 
     @NotNull(message = "title cannot be null", groups = {OnUpdate.class, OnCreate.class})
-    @Length(max=255, message = "Title cannot be longer than 255 characters",
+    @Length(max = 255, message = "Title cannot be longer than 255 characters",
             groups = {OnUpdate.class, OnCreate.class})
     @Schema(description = "Product title", example = "T-Shirt")
     private String title;
 
-    @Length(max=255, message = "Description cannot be longer than 255 characters")
+    @Length(max = 255, message = "Description cannot be longer than 255 characters")
     @Schema(description = "Product description", example = "T-Shirt with red color")
     private String description;
 

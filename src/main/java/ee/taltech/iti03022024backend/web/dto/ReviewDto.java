@@ -21,7 +21,7 @@ public class ReviewDto {
     @Schema(description = "Review rating", example = "4.5")
     private Double rating;
 
-    @Length(max=255, message = "Text cannot be longer than 255 characters", groups = {OnUpdate.class, OnCreate.class})
+    @Length(max = 255, message = "Text cannot be longer than 255 characters", groups = {OnUpdate.class, OnCreate.class})
     @Schema(description = "Review text", example = "I love this T-shirt! but I don't like red color")
     private String text;
 }
