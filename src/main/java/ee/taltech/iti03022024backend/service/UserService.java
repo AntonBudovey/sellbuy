@@ -69,12 +69,12 @@ public class UserService {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> {
                         log.warn("User with username {} not found", username);
-                        return new ResourceNotFoundException("User with username " + username + " not found");
+                        return new ResourceNotFoundException("User with username " + username + " not found in getUserByUsername");
                     });
             log.info("Successfully fetched user with username: {}", username);
             return user;
         } catch (ResourceNotFoundException e) {
-            log.error("Resource not found: {}", e.getMessage(), e);
+            log.error("Resource not found in getUserByUsername: {}", e.getMessage(), e);
             throw e;
         } catch (Exception e) {
             log.error("Unexpected error while fetching user by username: {}", username, e);
@@ -88,17 +88,17 @@ public class UserService {
         try {
             User user = userRepository.findWithProductsById(id)
                     .orElseThrow(() -> {
-                        log.warn("User with id {} not found", id);
-                        return new ResourceNotFoundException("User with id " + id + " not found");
+                        log.warn("User with id {} not found in getUserByIdWithProducts", id);
+                        return new ResourceNotFoundException("User with products with id " + id + " not found in getUserByIdWithProducts");
                     });
             Hibernate.initialize(user.getProducts());
             log.info("Successfully fetched user with id {} and initialized products", id);
             return user;
         } catch (ResourceNotFoundException e) {
-            log.error("Resource not found: {}", e.getMessage(), e);
+            log.error("Resource not found in getUserByIdWithProducts: {}", e.getMessage(), e);
             throw e;
         } catch (Exception e) {
-            log.error("Unexpected error while fetching user by id: {}", id, e);
+            log.error("Unexpected error while fetching user by id with products: {}", id, e);
             throw e;
         }
     }

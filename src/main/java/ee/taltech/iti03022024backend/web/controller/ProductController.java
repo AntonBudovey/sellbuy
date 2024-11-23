@@ -65,7 +65,7 @@ public class ProductController {
     PageResponse<ProductDto> getAllProducts(@ModelAttribute ProductSearchCriteria criteria) {
         Page<Product> products = productService.getAllProducts(criteria);
         Page<ProductDto> productPages = products.map(productMapper::toDto);
-        return new PageResponse<ProductDto>(productPages.getContent()
+        return new PageResponse<>(productPages.getContent()
                 , productPages.getNumber()
                 , productPages.getSize()
                 , productPages.getTotalPages()

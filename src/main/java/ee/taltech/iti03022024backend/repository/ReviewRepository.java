@@ -14,23 +14,23 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Modifying
     @Query(value = """
-    UPDATE reviews
-    SET product_id = :productId
-    WHERE id = :reviewId
-""", nativeQuery = true)
+                UPDATE reviews
+                SET product_id = :productId
+                WHERE id = :reviewId
+            """, nativeQuery = true)
     void assignReviewToProduct(@Param("reviewId") Long reviewId, @Param("productId") Long productId);
 
     @Modifying
     @Query(value = """
-    UPDATE reviews
-    SET user_id = :userId
-    WHERE id = :reviewId
-""", nativeQuery = true)
+                UPDATE reviews
+                SET user_id = :userId
+                WHERE id = :reviewId
+            """, nativeQuery = true)
     void assignReviewToUser(@Param("reviewId") Long reviewId, @Param("userId") Long userId);
 
     @Query(value = """
-    SELECT p.reviews
-    FROM Product p
-    WHERE p.id = :productId""")
+            SELECT p.reviews
+            FROM Product p
+            WHERE p.id = :productId""")
     List<Review> findAllByProductId(@Param("productId") Long productId);
 }

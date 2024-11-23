@@ -5,5 +5,5 @@ import ee.taltech.iti03022024backend.web.dto.CategoryDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface CategoryMapper extends Mappable<Category, CategoryDto>{
+public interface CategoryMapper extends Mappable<Category, CategoryDto> {
 }

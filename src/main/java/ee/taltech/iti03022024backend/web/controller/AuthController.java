@@ -11,11 +11,11 @@ import ee.taltech.iti03022024backend.web.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 @Tag(name = "Auth controller", description = "API for authentication")
 public class AuthController {
     private final UserService userService;
@@ -48,7 +49,10 @@ public class AuthController {
     public JwtResponse refreshToken(@RequestBody String refreshToken) {
         return authService.refresh(refreshToken);
     }
+
     @PostMapping("/logout")
     @Operation(summary = "set your token in header into blocked tokens")
-    public void logout() {}
+    public void logout() {
+        log.info("User logged out");
+    }
 }

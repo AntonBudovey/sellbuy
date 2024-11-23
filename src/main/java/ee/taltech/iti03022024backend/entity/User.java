@@ -20,6 +20,8 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.IOException;
+import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -54,7 +56,6 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
 
-
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<Product> products;
@@ -66,5 +67,13 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        // Appropriate serialization logic here
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        // Appropriate deserialization logic here
     }
 }

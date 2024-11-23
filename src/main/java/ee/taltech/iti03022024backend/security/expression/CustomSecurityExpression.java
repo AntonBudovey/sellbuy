@@ -5,8 +5,6 @@ import ee.taltech.iti03022024backend.entity.Review;
 import ee.taltech.iti03022024backend.entity.User;
 import ee.taltech.iti03022024backend.entity._enum.Role;
 import ee.taltech.iti03022024backend.service.UserService;
-import ee.taltech.iti03022024backend.web.dto.ProductDto;
-import ee.taltech.iti03022024backend.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +25,6 @@ public class CustomSecurityExpression {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         User userWithProducts = userService.getUserByIdWithProducts(user.getId());
-        System.out.println(userWithProducts.getProducts().stream().map(Product::getId).toList());
         return userWithProducts.getProducts().stream().map(Product::getId).toList().contains(productId)
                 || user.getRoles().contains(Role.ROLE_ADMIN);
     }

@@ -16,13 +16,13 @@ public class UserDto {
     private Long id;
 
     @NotNull(message = "username cannot be null", groups = {OnUpdate.class, OnCreate.class})
-    @Length(max=255, message = "Username cannot be longer than 255 characters",
+    @Length(max = 255, message = "Username cannot be longer than 255 characters",
             groups = {OnUpdate.class, OnCreate.class})
     @Schema(description = "User username", example = "john")
     private String username;
 
     @NotNull(message = "email cannot be null", groups = {OnUpdate.class, OnCreate.class})
-    @Length(max=255, message = "Email cannot be longer than 255 characters",
+    @Length(max = 255, message = "Email cannot be longer than 255 characters",
             groups = {OnUpdate.class, OnCreate.class})
     @Email
     @Schema(description = "User email", example = "Xx7zK@example.com")

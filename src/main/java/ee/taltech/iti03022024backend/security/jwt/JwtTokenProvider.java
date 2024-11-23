@@ -16,7 +16,6 @@ import lombok.SneakyThrows;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +26,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class JwtTokenProvider {
+    private static final String TOKEN_ID = "tokenId";
 
     private final JwtProperties jwtProperties;
     private final BlockedJwtRepository blockedJwtRepository;
@@ -55,7 +54,7 @@ public class JwtTokenProvider {
                 .subject(username)
                 .add("id", userId)
                 .add("roles", resolveRoles(roles))
-                .add("tokenId", tokenId)
+                .add(TOKEN_ID, tokenId)
                 .build();
         Instant validity = Instant.now()
                 .plus(jwtProperties.getAccess(), ChronoUnit.HOURS);
@@ -71,7 +70,7 @@ public class JwtTokenProvider {
     ) {
         return roles.stream()
                 .map(Enum::name)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public String createRefreshToken(
@@ -82,7 +81,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims()
                 .subject(username)
                 .add("id", userId)
-                .add("tokenId", tokenId)
+                .add(TOKEN_ID, tokenId)
                 .build();
         Instant validity = Instant.now()
                 .plus(jwtProperties.getRefresh(), ChronoUnit.DAYS);
@@ -111,8 +110,9 @@ public class JwtTokenProvider {
         );
         return jwtResponse;
     }
+
     @SneakyThrows
-    public boolean isValid (
+    public boolean isValid(
             final String token
     ) {
         if (blockedJwtRepository.existsByTokenId(UUID.fromString(getTokenId(token)))) {
@@ -140,29 +140,15 @@ public class JwtTokenProvider {
                 .get("id", Long.class);
     }
 
-    private String getUsername(
-            final String token
-    ) {
-        return Jwts
-                .parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
-    }
-
     public Authentication getAuthentication(
             final String token
     ) {
-        String username = getUsername(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(
-                username
-        );
+        Long userId = getId(token);
+        User user = userService.getUserById(userId);
         return new UsernamePasswordAuthenticationToken(
-                userDetails,
+                user,
                 "",
-                userDetails.getAuthorities()
+                user.getAuthorities()
         );
     }
 
@@ -173,6 +159,6 @@ public class JwtTokenProvider {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("tokenId", String.class);
+                .get(TOKEN_ID, String.class);
     }
 }

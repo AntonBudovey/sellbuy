@@ -7,5 +7,5 @@ public record PageResponse<T>(List<T> content,
                               int pageSize,
                               int totalPages,
                               long totalElements
-                              ) {
+) {
 }

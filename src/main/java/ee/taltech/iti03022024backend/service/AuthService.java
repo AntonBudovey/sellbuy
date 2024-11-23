@@ -1,7 +1,6 @@
 package ee.taltech.iti03022024backend.service;
 
 import ee.taltech.iti03022024backend.entity.User;
-import ee.taltech.iti03022024backend.repository.BlockedJwtRepository;
 import ee.taltech.iti03022024backend.security.jwt.JwtTokenProvider;
 import ee.taltech.iti03022024backend.web.dto.jwt.JwtRequest;
 import ee.taltech.iti03022024backend.web.dto.jwt.JwtResponse;
