@@ -12,12 +12,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -54,5 +51,10 @@ public class AuthController {
     @Operation(summary = "set your token in header into blocked tokens")
     public void logout() {
         log.info("User logged out");
+    }
+
+    @GetMapping("/profile")
+    public UserDto retrieveUser(Authentication authentication) {
+        return userMapper.toDto((User) authentication.getPrincipal());
     }
 }

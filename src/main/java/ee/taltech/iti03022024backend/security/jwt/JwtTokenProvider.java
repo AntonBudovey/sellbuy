@@ -57,7 +57,7 @@ public class JwtTokenProvider {
                 .add(TOKEN_ID, tokenId)
                 .build();
         Instant validity = Instant.now()
-                .plus(jwtProperties.getAccess(), ChronoUnit.HOURS);
+                .plus(jwtProperties.getAccess(), ChronoUnit.DAYS);
         return Jwts.builder()
                 .claims(claims)
                 .expiration(Date.from(validity))

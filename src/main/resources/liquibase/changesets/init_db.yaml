@@ -64,7 +64,7 @@ databaseChangeLog:
                   name: sold_out
                   type: boolean
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: user_id
                   type: bigint

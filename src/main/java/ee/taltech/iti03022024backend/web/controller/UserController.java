@@ -32,19 +32,17 @@ public class UserController {
     private final UserMapper userMapper;
 
 
-    @PutMapping
+    @PutMapping("/update")
     @Operation(summary = "update user(can user himself and admin)")
     @PreAuthorize("@customSecurityExpression.canAccessUser(#dto.id)")
     public UserDto updateUser(@Validated(OnUpdate.class) @RequestBody UserDto dto) {
-        User user = userService.updateUser(userMapper.toEntity(dto));
-        return userMapper.toDto(user);
+        return userMapper.toDto(userService.updateUser(userMapper.toEntity(dto)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "get user by id")
     public UserDto getUserById(@PathVariable Long id) {
-        User user = userService.getUserByIdWithProducts(id);
-        UserDto userDto = userMapper.toDto(user);
+        UserDto userDto = userMapper.toDto(userService.getUserByIdWithProducts(id));
         userDto.setCommonRating(userService.getCommonRatingForUser(id));
         return userDto;
     }
