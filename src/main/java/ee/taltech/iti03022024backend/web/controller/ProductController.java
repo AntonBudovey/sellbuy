@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/v1/products")
@@ -39,7 +42,14 @@ public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
 
-    @PostMapping()
+    @GetMapping("/{id}")
+    @Operation(summary = "get product by id")
+    public ProductDto getProductById(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        return productMapper.toDto(product);
+    }
+
+    @PostMapping("/create")
     @Operation(summary = "create new product and as owner login user")
     ProductDto createProduct(@Validated(OnCreate.class) @RequestBody ProductDto dto
             , Authentication authentication) {
@@ -50,9 +60,9 @@ public class ProductController {
         return productMapper.toDto(createdProduct);
     }
 
-    @PutMapping
+    @PutMapping("/update/{id}")
     @Operation(summary = "update product(can product owner and admin)")
-    @PreAuthorize("@customSecurityExpression.canAccessProduct(#dto.id)")
+//    @PreAuthorize("@customSecurityExpression.canAccessProduct(#dto.id)")
     ProductDto updateProduct(@Validated(OnUpdate.class) @RequestBody ProductDto dto) {
         Product product = productMapper.toEntity(dto);
         Product updatedProduct = productService.updateProduct(product);
@@ -60,7 +70,7 @@ public class ProductController {
         return productMapper.toDto(updatedProduct);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @Operation(summary = "get all products with sorting and pagination")
     PageResponse<ProductDto> getAllProducts(@ModelAttribute ProductSearchCriteria criteria) {
         Page<Product> products = productService.getAllProducts(criteria);
@@ -70,6 +80,14 @@ public class ProductController {
                 , productPages.getSize()
                 , productPages.getTotalPages()
                 , productPages.getTotalElements());
+    }
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "get all products by user id")
+    public List<ProductDto> getProductsByUserId(@PathVariable Long userId) {
+        List<Product> products = productService.getProductsByUserId(userId);
+        return products.stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")

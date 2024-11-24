@@ -30,5 +30,5 @@ public class ProductDto {
 
     private Boolean soldOut;
 
-
+    private UserDto user;
 }

@@ -56,6 +56,12 @@ public class Iti03022024BackendApplication {
             category.setId(1L);
             category.setName("Clothing");
             categoryRepository.save(category);
+            User user = new User();
+            user.setUsername("anton");
+            user.setEmail("email1");
+            user.setPassword("$2a$12$4PdxKUC1NZN9cX4WRB4kP.KrxD98xWAmZ12Koy0zTyVLEifnnhFIO");
+            user.setRoles(Set.of(Role.ROLE_USER));
+            userRepository.save(user);
 
             User user2 = new User();
             user2.setUsername("nikita");

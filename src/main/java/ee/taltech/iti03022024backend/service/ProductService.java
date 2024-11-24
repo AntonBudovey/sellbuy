@@ -13,11 +13,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    // have to change
+    public List<Product> getProductsByUserId(Long userId) {
+        return productRepository.findByUserId(userId);
+    }
 
     @Transactional
     public Product createProduct(Product product, Long userId) {
