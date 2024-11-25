@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/users")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://frontend:3000")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "User controller", description = "User API")
