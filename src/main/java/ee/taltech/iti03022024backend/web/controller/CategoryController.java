@@ -23,7 +23,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/categories")
-@CrossOrigin(origins = "http://frontend:3000")
 @Validated
 @RequiredArgsConstructor
 public class CategoryController {

@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://frontend:3000")
 @RequestMapping("api/v1/products")
 @RequiredArgsConstructor
 @Validated
