@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.List;
-
 @Data
 public class CategoryDto {
     @NotNull(message = "id cannot be null", groups = {OnUpdate.class})
@@ -19,6 +17,4 @@ public class CategoryDto {
             groups = {OnUpdate.class, OnCreate.class})
     @Schema(description = "Category name", example = "home")
     private String name;
-
-    private List<ProductDto> products;
 }

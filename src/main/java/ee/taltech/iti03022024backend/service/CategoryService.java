@@ -4,6 +4,9 @@ import ee.taltech.iti03022024backend.entity.Category;
 import ee.taltech.iti03022024backend.entity.Product;
 import ee.taltech.iti03022024backend.exception.ResourceNotFoundException;
 import ee.taltech.iti03022024backend.repository.CategoryRepository;
+import ee.taltech.iti03022024backend.web.dto.CategoryDto;
+import ee.taltech.iti03022024backend.web.mapper.CategoryMapper;
+import ee.taltech.iti03022024backend.web.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,14 +20,17 @@ import java.util.List;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductService productService;
+    private final CategoryMapper categoryMapper;
+    private final ProductMapper productMapper;
 
     @Transactional
-    public Category createCategory(Category category) {
+    public CategoryDto createCategory(CategoryDto category) {
         log.info("Attempting to create a category with name: {}", category.getName());
         try {
-            Category result = categoryRepository.save(category);
+            Category categoryEntity = categoryMapper.toEntity(category);
+            Category result = categoryRepository.save(categoryEntity);
             log.info("Successfully created category with id: {}", result.getId());
-            return result;
+            return categoryMapper.toDto(result);
         } catch (Exception e) {
             log.error("Error occurred while creating category with name: {}", category.getName(), e);
             throw e;
@@ -32,12 +38,12 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<Category> getAllCategories() {
+    public List<CategoryDto> getAllCategories() {
         log.info("Fetching all categories");
         try {
             List<Category> categories = categoryRepository.findAll();
             log.info("Successfully fetched {} categories", categories.size());
-            return categories;
+            return categoryMapper.toDto(categories);
         } catch (Exception e) {
             log.error("Error occurred while fetching all categories", e);
             throw e;
@@ -69,13 +75,13 @@ public class CategoryService {
                 return new ResourceNotFoundException("Category with id " + categoryId + " not found");
             });
 
-            Product product = productService.getProductById(productId);
+            Product product = productMapper.toEntity(productService.getProductById(productId));
             category.getProducts().add(product);
             product.getCategories().add(category);
             log.info("Added product with id {} to category with id {}", productId, categoryId);
 
             categoryRepository.save(category);
-            productService.updateProduct(product);
+            productService.updateProduct(productMapper.toDto(product));
             log.info("Successfully saved category and updated product");
         } catch (ResourceNotFoundException e) {
             log.error("Error: Resource not found - {}", e.getMessage(), e);

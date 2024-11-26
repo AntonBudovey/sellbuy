@@ -33,4 +33,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             FROM Product p
             WHERE p.id = :productId""")
     List<Review> findAllByProductId(@Param("productId") Long productId);
+
+    List<Review> findByUserId(Long userId);
 }

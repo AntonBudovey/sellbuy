@@ -9,7 +9,7 @@ the aim of that project is create to web service where people can buy and sell t
 * Liquibase
 * React
 * JJWT 0.12.6
-* Spring Boot
+* Spring Boot 3.3.4
 * Java 21
 * Swagger 2.6.0
 * MapStruct 1.6.2
@@ -33,6 +33,31 @@ Before you start, you need to create a file in project root directory `.env` con
 You can use your own username and password.<br>
 If you want to run application without Docker with your own database so use `POSTGRES_HOST=localhost`
 
+## How to start application
+create .env file with `POSTGRES_HOST=postgres`<br>
+And in the same directory create docker-compose.yaml file:
+```yaml
+version: "3.8"
+services:
+  backend:
+    image: anbudo2/iti0302-2024-backend
+    container_name: iti0302-2024-backend
+    env_file: .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+  postgres:
+    container_name: iti0302-2024-backend-postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+```
+
+And run `docker-compose up`<br>
+now backend work on port 8080 and you acn login swagger through http://localhost:8080/swagger-ui/index.html
+
 ## How to build  and run app
 
 1. Firstly clone app from gitlab
@@ -47,6 +72,7 @@ If you want to run application without Docker with your own database so use `POS
     ```
 
 Or you can just write this command
+
 ```bash
 .\mvnw spring-boot:run
 ```

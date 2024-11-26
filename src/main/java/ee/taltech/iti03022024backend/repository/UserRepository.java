@@ -19,6 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 WHERE p.user.id = :userId
             """)
     Double getUserRatingByUserId(@Param("userId") Long userId);
+
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.products WHERE u.id = :id")
     @EntityGraph(attributePaths = {"products"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<User> findWithProductsById(@Param("id") Long id);

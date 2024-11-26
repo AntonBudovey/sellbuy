@@ -36,4 +36,5 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Double commonRating;
 
+
 }

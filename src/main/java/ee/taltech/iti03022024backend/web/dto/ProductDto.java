@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Data
 @Schema(description = "Product")
 public class ProductDto {
@@ -31,4 +33,6 @@ public class ProductDto {
     private Boolean soldOut;
 
     private UserDto user;
+
+    private List<CategoryDto> categories;
 }

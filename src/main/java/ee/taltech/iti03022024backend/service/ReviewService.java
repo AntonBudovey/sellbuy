@@ -3,6 +3,8 @@ package ee.taltech.iti03022024backend.service;
 import ee.taltech.iti03022024backend.entity.Review;
 import ee.taltech.iti03022024backend.exception.ResourceNotFoundException;
 import ee.taltech.iti03022024backend.repository.ReviewRepository;
+import ee.taltech.iti03022024backend.web.dto.ReviewDto;
+import ee.taltech.iti03022024backend.web.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,17 +18,19 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductService productService;
+    private final ReviewMapper reviewMapper;
 
 
     @Transactional
-    public Review createReview(Review review, Long productId, Long userId) {
+    public ReviewDto createReview(ReviewDto review, Long productId, Long userId) {
         log.info("Attempting to create review for productId: {} and userId: {}", productId, userId);
         try {
-            Review createdReview = reviewRepository.save(review);
+            Review reviewEntity = reviewMapper.toEntity(review);
+            Review createdReview = reviewRepository.save(reviewEntity);
             reviewRepository.assignReviewToProduct(createdReview.getId(), productId);
             reviewRepository.assignReviewToUser(createdReview.getId(), userId);
             log.info("Successfully created review with id: {} for productId: {} and userId: {}", createdReview.getId(), productId, userId);
-            return createdReview;
+            return reviewMapper.toDto(createdReview);
         } catch (Exception e) {
             log.error("Error occurred while creating review for productId: {} and userId: {}", productId, userId, e);
             throw e;
@@ -34,12 +38,13 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review updateReview(Review review) {
+    public ReviewDto updateReview(ReviewDto review) {
         log.info("Attempting to update review with id: {}", review.getId());
         try {
-            Review updatedReview = reviewRepository.save(review);
+            Review reviewEntity = reviewMapper.toEntity(review);
+            Review updatedReview = reviewRepository.save(reviewEntity);
             log.info("Successfully updated review with id: {}", updatedReview.getId());
-            return updatedReview;
+            return reviewMapper.toDto(updatedReview);
         } catch (Exception e) {
             log.error("Error occurred while updating review with id: {}", review.getId(), e);
             throw e;
@@ -47,7 +52,7 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<Review> getAllReviewsByProductId(Long productId) {
+    public List<ReviewDto> getAllReviewsByProductId(Long productId) {
         log.info("Fetching all reviews for productId: {}", productId);
         if (!productService.existsById(productId)) {
             log.warn("Product with id {} not found", productId);
@@ -56,7 +61,7 @@ public class ReviewService {
         try {
             List<Review> reviews = reviewRepository.findAllByProductId(productId);
             log.info("Successfully fetched {} reviews for productId: {}", reviews.size(), productId);
-            return reviews;
+            return reviewMapper.toDto(reviews);
         } catch (Exception e) {
             log.error("Error occurred while fetching reviews for productId: {}", productId, e);
             throw e;
@@ -73,6 +78,11 @@ public class ReviewService {
             log.error("Error occurred while deleting review with id: {}", id, e);
             throw e;
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReviewDto> getReviewsByUserId(Long userId) {
+        return reviewMapper.toDto(reviewRepository.findByUserId(userId));
     }
 }
 

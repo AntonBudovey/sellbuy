@@ -4,6 +4,8 @@ import ee.taltech.iti03022024backend.entity.Product;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecification {
+    private ProductSpecification() {}
+    public static final String PRICE = "price";
 
     public static Specification<Product> priceInRange(Double min, Double max) {
 
@@ -12,12 +14,12 @@ public class ProductSpecification {
                 return null;
             }
             if (min == null) {
-                return criteriaBuilder.lessThanOrEqualTo(root.get("price"), max);
+                return criteriaBuilder.lessThanOrEqualTo(root.get(PRICE), max);
             }
             if (max == null) {
-                return criteriaBuilder.greaterThanOrEqualTo(root.get("price"), min);
+                return criteriaBuilder.greaterThanOrEqualTo(root.get(PRICE), min);
             }
-            return criteriaBuilder.between(root.get("price"), min, max);
+            return criteriaBuilder.between(root.get(PRICE), min, max);
         };
     }
 }

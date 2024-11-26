@@ -4,7 +4,9 @@ import ee.taltech.iti03022024backend.entity.Product;
 import ee.taltech.iti03022024backend.exception.ResourceNotFoundException;
 import ee.taltech.iti03022024backend.repository.ProductRepository;
 import ee.taltech.iti03022024backend.repository.specification.ProductSpecification;
+import ee.taltech.iti03022024backend.web.dto.ProductDto;
 import ee.taltech.iti03022024backend.web.dto.pagination.ProductSearchCriteria;
+import ee.taltech.iti03022024backend.web.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,19 +22,22 @@ import java.util.List;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
+
     // have to change
-    public List<Product> getProductsByUserId(Long userId) {
-        return productRepository.findByUserId(userId);
+    public List<ProductDto> getProductsByUserId(Long userId) {
+        return productMapper.toDto(productRepository.findByUserId(userId));
     }
 
     @Transactional
-    public Product createProduct(Product product, Long userId) {
+    public ProductDto createProduct(ProductDto product, Long userId) {
         log.info("Attempting to create product for userId: {}", userId);
         try {
-            Product createdProduct = productRepository.save(product);
+            Product productEntity = productMapper.toEntity(product);
+            Product createdProduct = productRepository.save(productEntity);
             productRepository.assignProductToUser(createdProduct.getId(), userId);
             log.info("Successfully created product with id: {} and assigned to userId: {}", createdProduct.getId(), userId);
-            return createdProduct;
+            return productMapper.toDto(createdProduct);
         } catch (Exception e) {
             log.error("Error occurred while creating product for userId: {}", userId, e);
             throw e;
@@ -40,7 +45,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Product> getAllProducts(ProductSearchCriteria criteria) {
+    public Page<ProductDto> getAllProducts(ProductSearchCriteria criteria) {
         log.info("Fetching products with search criteria: {}", criteria);
         try {
             Sort.Direction direction = criteria.getSortDirection() != null
@@ -55,7 +60,7 @@ public class ProductService {
                     pageRequest
             );
             log.info("Successfully fetched {} products", products.getTotalElements());
-            return products;
+            return products.map(productMapper::toDto);
         } catch (Exception e) {
             log.error("Error occurred while fetching products with criteria: {}", criteria, e);
             throw e;
@@ -63,7 +68,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Product getProductById(Long id) {
+    public ProductDto getProductById(Long id) {
         log.info("Fetching product by id: {}", id);
         try {
             Product product = productRepository.findWithReviewsById(id)
@@ -72,7 +77,7 @@ public class ProductService {
                         return new ResourceNotFoundException("Product with id " + id + " not found in getProductById");
                     });
             log.info("Successfully fetched product with id: {}", id);
-            return product;
+            return productMapper.toDto(product);
         } catch (ResourceNotFoundException e) {
             log.error("Resource not found: {}", e.getMessage(), e);
             throw e;
@@ -83,7 +88,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Product getProductByIdWithCategories(Long id) {
+    public ProductDto getProductByIdWithCategories(Long id) {
         log.info("Fetching product with categories by id: {}", id);
         try {
             Product product = productRepository.findWithCategoriesById(id)
@@ -92,7 +97,7 @@ public class ProductService {
                         return new ResourceNotFoundException("Product with categories with id " + id + " not found in getProductByIdWithCategories");
                     });
             log.info("Successfully fetched product with categories for id: {}", id);
-            return product;
+            return productMapper.toDto(product);
         } catch (ResourceNotFoundException e) {
             log.error("Resource not found: {}", e.getMessage(), e);
             throw e;
@@ -103,16 +108,17 @@ public class ProductService {
     }
 
     @Transactional
-    public Product updateProduct(Product product) {
+    public ProductDto updateProduct(ProductDto product) {
         log.info("Attempting to update product with id: {}", product.getId());
         if (!productRepository.existsById(product.getId())) {
             log.warn("Product with id {} not found", product.getId());
             throw new ResourceNotFoundException("Product to update with id " + product.getId() + " not found");
         }
         try {
-            Product updatedProduct = productRepository.save(product);
+            Product productEntity = productMapper.toEntity(product);
+            Product updatedProduct = productRepository.save(productEntity);
             log.info("Successfully updated product with id: {}", updatedProduct.getId());
-            return updatedProduct;
+            return productMapper.toDto(updatedProduct);
         } catch (Exception e) {
             log.error("Error occurred while updating product with id: {}", product.getId(), e);
             throw e;
