@@ -17,7 +17,6 @@ import lombok.SneakyThrows;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -35,8 +34,6 @@ public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
     private final BlockedJwtRepository blockedJwtRepository;
-
-    private final UserDetailsService userDetailsService;
     private final UserService userService;
     private final UserMapper userMapper;
     private SecretKey key;

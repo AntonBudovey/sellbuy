@@ -4,7 +4,6 @@ import ee.taltech.iti03022024backend.entity.User;
 import ee.taltech.iti03022024backend.entity._enum.Role;
 import ee.taltech.iti03022024backend.service.ProductService;
 import ee.taltech.iti03022024backend.service.ReviewService;
-import ee.taltech.iti03022024backend.service.UserService;
 import ee.taltech.iti03022024backend.web.dto.ProductDto;
 import ee.taltech.iti03022024backend.web.dto.ReviewDto;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class CustomSecurityExpression {
-    private final UserService userService;
     private final ProductService productService;
     private final ReviewService reviewService;
 
