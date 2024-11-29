@@ -13,7 +13,6 @@ import org.hibernate.validator.constraints.Length;
 @Schema(description = "User")
 public class UserDto {
     @NotNull(message = "id cannot be null", groups = {OnUpdate.class})
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
 
     @NotNull(message = "username cannot be null", groups = {OnUpdate.class, OnCreate.class})
