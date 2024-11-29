@@ -55,7 +55,7 @@ public class AuthController {
         log.info("User logged out");
     }
 
-    @GetMapping("/profile")
+    @GetMapping()
     public UserDto retrieveUser(Authentication authentication) {
         return userMapper.toDto((User) authentication.getPrincipal());
     }
