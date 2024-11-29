@@ -27,7 +27,7 @@ public class UserController {
     private final UserService userService;
 
 
-    @PutMapping("/update")
+    @PutMapping()
     @Operation(summary = "update user(can user himself and admin)")
     @PreAuthorize("@customSecurityExpression.canAccessUser(#dto.id)")
     public UserDto updateUser(@Validated(OnUpdate.class) @RequestBody UserDto dto) {

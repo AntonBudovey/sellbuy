@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +41,7 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     @Operation(summary = "create new product and as owner login user")
     ProductDto createProduct(@Validated(OnCreate.class) @RequestBody ProductDto dto
             , Authentication authentication) {
@@ -50,13 +49,13 @@ public class ProductController {
         return productService.createProduct(dto, userId);
     }
 
-    @PutMapping("/update")
+    @PutMapping()
     @Operation(summary = "update product(can product owner and admin)")
     ProductDto updateProduct(@Validated(OnUpdate.class) @RequestBody ProductDto dto) {
         return productService.updateProduct(dto);
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     @Operation(summary = "get all products with sorting and pagination")
     PageResponse<ProductDto> getAllProducts(@ModelAttribute ProductSearchCriteria criteria) {
         Page<ProductDto> products = productService.getAllProducts(criteria);

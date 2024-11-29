@@ -64,7 +64,7 @@ services:
          - postgres
 
    frontend:
-      build: .
+      image: madlinnov/front-application
       networks:
          - app
       ports:
@@ -158,3 +158,5 @@ This command will:
  - Build the Docker image (if needed), <br>
  - Import and start the PostgreSQL database container, <br>
  - Start both the frontend and backend containers.
+## Link to website
+http://sellbuy.myvnc.com/
