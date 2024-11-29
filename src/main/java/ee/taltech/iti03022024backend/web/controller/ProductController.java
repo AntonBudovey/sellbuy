@@ -52,7 +52,6 @@ public class ProductController {
 
     @PutMapping("/update")
     @Operation(summary = "update product(can product owner and admin)")
-//    @PreAuthorize("@customSecurityExpression.canAccessProduct(#dto.id)")
     ProductDto updateProduct(@Validated(OnUpdate.class) @RequestBody ProductDto dto) {
         return productService.updateProduct(dto);
     }
@@ -77,7 +76,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @Operation(summary = "delete product(can product owner and admin)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("@customSecurityExpression.canAccessProduct(#id)")
     void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
     }

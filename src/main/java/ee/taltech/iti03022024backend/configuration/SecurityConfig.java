@@ -67,7 +67,7 @@ public class SecurityConfig {
                                 "v3/api-docs/**",
                                 "/api/v1/products/**",
                                 "/api/v1/users/**",
-                                "/api/v1/categories").permitAll()
+                                "/api/v1/categories/**").permitAll()
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider, blockedJwtRepository), UsernamePasswordAuthenticationFilter.class)
