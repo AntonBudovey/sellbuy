@@ -18,7 +18,7 @@ public class UserDto {
     @NotNull(message = "username cannot be null", groups = {OnUpdate.class, OnCreate.class})
     @Length(max = 255, message = "Username cannot be longer than 255 characters",
             groups = {OnUpdate.class, OnCreate.class})
-    @Schema(description = "User username", example = "john")
+    @Schema(description = "User username", example = "anton")
     private String username;
 
     @NotNull(message = "email cannot be null", groups = {OnUpdate.class, OnCreate.class})
