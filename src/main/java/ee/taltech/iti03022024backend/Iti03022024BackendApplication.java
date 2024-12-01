@@ -24,9 +24,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class Iti03022024BackendApplication {
     private final UserRepository userRepository;
-    private final ProductService productService;
     private final ProductRepository productRepository;
-    private final ReviewService reviewService;
 
     public static void main(String[] args) {
         SpringApplication.run(Iti03022024BackendApplication.class, args);
@@ -62,7 +60,6 @@ public class Iti03022024BackendApplication {
             user.setPassword("$2a$12$4PdxKUC1NZN9cX4WRB4kP.KrxD98xWAmZ12Koy0zTyVLEifnnhFIO");
             user.setRoles(Set.of(Role.ROLE_USER));
             userRepository.save(user);
-
 
 
         };
