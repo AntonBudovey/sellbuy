@@ -63,12 +63,6 @@ public class Iti03022024BackendApplication {
             user.setRoles(Set.of(Role.ROLE_USER));
             userRepository.save(user);
 
-            User user2 = new User();
-            user2.setUsername("nikita");
-            user2.setPassword("$2a$12$4PdxKUC1NZN9cX4WRB4kP.KrxD98xWAmZ12Koy0zTyVLEifnnhFIO");
-            user2.setEmail("email2");
-            user2.setRoles(Set.of(Role.ROLE_USER));
-            userRepository.save(user2);
 
 
         };
