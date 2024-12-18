@@ -6,7 +6,6 @@ import ee.taltech.iti03022024backend.security.LogoutJwtTokenFilter;
 import ee.taltech.iti03022024backend.security.jwt.JwtTokenProvider;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -64,15 +63,13 @@ public class SecurityConfig {
                     });
                 })
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/auth/**",
+                        .requestMatchers(
                                 "/swagger-ui/**",
                                 "v3/api-docs/**"
-
-//                                "/api/v1/products/**",
-//                                "/api/v1/users/**",
-//                                "/api/v1/categories/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/v1/auth").authenticated()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider, blockedJwtRepository), UsernamePasswordAuthenticationFilter.class)

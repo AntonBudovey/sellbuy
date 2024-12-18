@@ -8,8 +8,6 @@ import ee.taltech.iti03022024backend.entity._enum.Role;
 import ee.taltech.iti03022024backend.repository.CategoryRepository;
 import ee.taltech.iti03022024backend.repository.ProductRepository;
 import ee.taltech.iti03022024backend.repository.UserRepository;
-import ee.taltech.iti03022024backend.service.ProductService;
-import ee.taltech.iti03022024backend.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,9 +22,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class Iti03022024BackendApplication {
     private final UserRepository userRepository;
-    private final ProductService productService;
     private final ProductRepository productRepository;
-    private final ReviewService reviewService;
 
     public static void main(String[] args) {
         SpringApplication.run(Iti03022024BackendApplication.class, args);
@@ -62,13 +58,6 @@ public class Iti03022024BackendApplication {
             user.setPassword("$2a$12$4PdxKUC1NZN9cX4WRB4kP.KrxD98xWAmZ12Koy0zTyVLEifnnhFIO");
             user.setRoles(Set.of(Role.ROLE_USER));
             userRepository.save(user);
-
-            User user2 = new User();
-            user2.setUsername("nikita");
-            user2.setPassword("$2a$12$4PdxKUC1NZN9cX4WRB4kP.KrxD98xWAmZ12Koy0zTyVLEifnnhFIO");
-            user2.setEmail("email2");
-            user2.setRoles(Set.of(Role.ROLE_USER));
-            userRepository.save(user2);
 
 
         };

@@ -15,7 +15,7 @@ The goal of this project is to create a web service where people can buy and sel
 * MapStruct 1.6.2 (for object mapping)
 
 #### Frontend
-* React 18.3.1 
+* React 18.3.1
 * Vite 5.4.8
 * Tailwind CSS 3.4.14
 * Axios 1.7.7
@@ -91,14 +91,14 @@ Run the following command to start the application (both backend and frontend) a
     docker-compose up
   ```
 This will start: <br>
-	•	The backend on port 8080, <br>
-	•	The frontend on port 3000, <br>
-	•	PostgreSQL database for persistence. <br>
+•	The backend on port 8080, <br>
+•	The frontend on port 3000, <br>
+•	PostgreSQL database for persistence. <br>
 
 You can access the Swagger UI for the backend at http://localhost:8080/swagger-ui/index.html, and the React frontend will be available at http://localhost:3000.
 ## Building the Application
 
-1. Clone the project from GitLab.<br> 
+1. Clone the project from GitLab.<br>
 2. Make sure your database is working.
 3. To build the application, run the following command in the root directory:
 ```bash
@@ -118,12 +118,12 @@ Alternatively, you can use Maven to run the backend directly:
 
 ### Running the Frontend (React with Vite)
 1. Clone the project from GitLab.<br>
-    https://gitlab.cs.taltech.ee/anbudo/iti0302-2024-frontend.git
- 2.	Install the necessary dependencies using npm or yarn:
+   https://gitlab.cs.taltech.ee/anbudo/iti0302-2024-frontend.git
+2.	Install the necessary dependencies using npm or yarn:
 ```bash
 npm install  # or yarn install
 ```
-   3. Run the frontend app locally in development mode:
+3. Run the frontend app locally in development mode:
 ```bash
 npm run dev  # or yarn dev
 ```
@@ -155,8 +155,8 @@ docker-compose up
 
 This command will:
 
- - Build the Docker image (if needed), <br>
- - Import and start the PostgreSQL database container, <br>
- - Start both the frontend and backend containers.
+- Build the Docker image (if needed), <br>
+- Import and start the PostgreSQL database container, <br>
+- Start both the frontend and backend containers.
 ## Link to website
 http://sellbuy.myvnc.com/

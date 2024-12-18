@@ -111,11 +111,17 @@ public class ProductService {
     public ProductDto updateProduct(ProductDto product) {
         log.info("Attempting to update product with id: {}", product.getId());
         if (!productRepository.existsById(product.getId())) {
-            log.warn("Product with id {} not found", product.getId());
+            log.warn("Product with id {}" + UserService.NOT_FOUND, product.getId());
             throw new ResourceNotFoundException("Product to update with id " + product.getId() + " not found");
         }
         try {
             Product productEntity = productMapper.toEntity(product);
+            Product oldProduct = productRepository.findById(product.getId())
+                    .orElseThrow(() -> {
+                        log.warn("Product with id {} not found", product.getId());
+                        return new ResourceNotFoundException("Product to update with id " + product.getId() + " not found in updateProduct");
+                    });
+            productEntity.setUser(oldProduct.getUser());
             Product updatedProduct = productRepository.save(productEntity);
             log.info("Successfully updated product with id: {}", updatedProduct.getId());
             return productMapper.toDto(updatedProduct);

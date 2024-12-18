@@ -21,6 +21,8 @@ import java.util.Set;
 @Service
 public class UserService {
 
+    public static final String NOT_FOUND = " not found";
+    public static final String USER_WITH_ID = "User with id ";
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
@@ -47,6 +49,12 @@ public class UserService {
         log.info("Attempting to update user with id: {}", user.getId());
         try {
             User userEntity = userMapper.toEntity(user);
+            User oldUser = userRepository.findWithProductsById(user.getId())
+                    .orElseThrow(() -> {
+                        log.warn("User with id to update {} not found", user.getId());
+                        return new ResourceNotFoundException("User to update with id " + user.getId() + NOT_FOUND);
+                    });
+            userEntity.setRoles(oldUser.getRoles());
             userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
             User updatedUser = userRepository.save(userEntity);
             log.info("Successfully updated user with id: {}", updatedUser.getId());
@@ -118,17 +126,17 @@ public class UserService {
         try {
             User user = userRepository.findWithReviewsById(id)
                     .orElseThrow(() -> {
-                        log.warn("User with id {} not found", id);
-                        return new ResourceNotFoundException("User with id " + id + " not found");
+                        log.warn("User with reviews with id {} not found", id);
+                        return new ResourceNotFoundException(USER_WITH_ID + id + NOT_FOUND);
                     });
             Hibernate.initialize(user.getReviews());
             log.info("Successfully fetched user with id {} and initialized reviews", id);
             return userMapper.toDto(user);
         } catch (ResourceNotFoundException e) {
-            log.error("Resource not found: {}", e.getMessage(), e);
+            log.error("Resource" + NOT_FOUND + ": {}", e.getMessage(), e);
             throw e;
         } catch (Exception e) {
-            log.error("Unexpected error while fetching user by id: {}", id, e);
+            log.error("Unexpected error while fetching user by id with reviews: {}", id, e);
             throw e;
         }
     }
@@ -153,7 +161,7 @@ public class UserService {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> {
                         log.warn("User with id {} not found", userId);
-                        return new ResourceNotFoundException("User with id " + userId + " not found");
+                        return new ResourceNotFoundException(USER_WITH_ID + userId + NOT_FOUND);
                     });
             log.info("Successfully fetched user with id: {}", userId);
             return userMapper.toDto(user);
@@ -166,4 +174,22 @@ public class UserService {
         }
     }
 
+    public User getUserEntityById(Long userId) {
+        log.info("Fetching user by id: {}", userId);
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> {
+                        log.warn("User with id {} not found", userId);
+                        return new ResourceNotFoundException(USER_WITH_ID + userId + NOT_FOUND);
+                    });
+            log.info("Successfully fetched user with id: {}", userId);
+            return user;
+        } catch (ResourceNotFoundException e) {
+            log.error("Resource not found: {}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error while fetching user by id: {}", userId, e);
+            throw e;
+        }
+    }
 }
