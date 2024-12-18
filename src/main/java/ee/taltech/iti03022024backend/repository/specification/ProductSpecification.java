@@ -4,8 +4,10 @@ import ee.taltech.iti03022024backend.entity.Product;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecification {
-    private ProductSpecification() {}
     public static final String PRICE = "price";
+
+    private ProductSpecification() {
+    }
 
     public static Specification<Product> priceInRange(Double min, Double max) {
 

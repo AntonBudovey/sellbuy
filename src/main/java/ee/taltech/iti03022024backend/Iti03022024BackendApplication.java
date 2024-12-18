@@ -8,8 +8,6 @@ import ee.taltech.iti03022024backend.entity._enum.Role;
 import ee.taltech.iti03022024backend.repository.CategoryRepository;
 import ee.taltech.iti03022024backend.repository.ProductRepository;
 import ee.taltech.iti03022024backend.repository.UserRepository;
-import ee.taltech.iti03022024backend.service.ProductService;
-import ee.taltech.iti03022024backend.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

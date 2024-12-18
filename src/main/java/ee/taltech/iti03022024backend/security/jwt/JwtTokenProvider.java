@@ -6,7 +6,6 @@ import ee.taltech.iti03022024backend.repository.BlockedJwtRepository;
 import ee.taltech.iti03022024backend.security.jwt.props.JwtProperties;
 import ee.taltech.iti03022024backend.service.UserService;
 import ee.taltech.iti03022024backend.web.dto.jwt.JwtResponse;
-import ee.taltech.iti03022024backend.web.mapper.UserMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -35,7 +34,6 @@ public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
     private final BlockedJwtRepository blockedJwtRepository;
     private final UserService userService;
-    private final UserMapper userMapper;
     private SecretKey key;
 
     @PostConstruct
@@ -99,7 +97,7 @@ public class JwtTokenProvider {
             throw new AccessDeniedException("Invalid refresh token");
         }
         Long userId = getId(refreshToken);
-        User user = userMapper.toEntity(userService.getUserById(userId));
+        User user = userService.getUserEntityById(userId);
         UUID tokenId = UUID.fromString(getTokenId(refreshToken));
         jwtResponse.setAccessToken(
                 createAccessToken(userId, user.getUsername(), user.getRoles(), tokenId)
@@ -143,7 +141,7 @@ public class JwtTokenProvider {
             final String token
     ) {
         Long userId = getId(token);
-        User user = userMapper.toEntity(userService.getUserById(userId));
+        User user = userService.getUserEntityById(userId);
         return new UsernamePasswordAuthenticationToken(
                 user,
                 "",

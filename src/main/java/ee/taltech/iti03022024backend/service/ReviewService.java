@@ -42,6 +42,13 @@ public class ReviewService {
         log.info("Attempting to update review with id: {}", review.getId());
         try {
             Review reviewEntity = reviewMapper.toEntity(review);
+            Review oldReview = reviewRepository.findById(review.getId())
+                    .orElseThrow(() -> {
+                        log.warn("Review with id {} not found", review.getId());
+                        return new ResourceNotFoundException("Review with id " + review.getId() + " not found");
+                    });
+            reviewEntity.setUser(oldReview.getUser());
+            reviewEntity.setProduct(oldReview.getProduct());
             Review updatedReview = reviewRepository.save(reviewEntity);
             log.info("Successfully updated review with id: {}", updatedReview.getId());
             return reviewMapper.toDto(updatedReview);
