@@ -20,7 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -75,6 +76,7 @@ class CategoryServiceTest {
         categoryService.deleteCategory(1L);
         verify(categoryRepository, times(1)).deleteById(1L);
     }
+
     @Test
     void testDeleteCategoryThatNotExist() {
         Mockito.when(categoryRepository.existsById(1L)).thenReturn(false);
@@ -95,6 +97,7 @@ class CategoryServiceTest {
         verify(categoryRepository, times(1)).save(any(Category.class));
         verify(productService, times(1)).updateProduct(any(ProductDto.class));
     }
+
     @Test
     void testAddProductToCategoryWithCategoryNotExist() {
         Product product = new Product(1L, "Title", "Description", 5.0, false
@@ -108,6 +111,7 @@ class CategoryServiceTest {
         verify(categoryRepository, times(0)).save(any(Category.class));
         verify(productService, times(0)).updateProduct(any(ProductDto.class));
     }
+
     @Test
     void testAddProductToCategoryWithProductNotExist() {
         Product product = new Product(1L, "Title", "Description", 5.0, false

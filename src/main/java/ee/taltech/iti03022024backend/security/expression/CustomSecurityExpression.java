@@ -5,7 +5,6 @@ import ee.taltech.iti03022024backend.entity._enum.Role;
 import ee.taltech.iti03022024backend.service.ProductService;
 import ee.taltech.iti03022024backend.service.ReviewService;
 import ee.taltech.iti03022024backend.web.dto.ProductDto;
-import ee.taltech.iti03022024backend.web.dto.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

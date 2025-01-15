@@ -15,8 +15,10 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class ReviewServiceTest {
     @InjectMocks
@@ -59,6 +61,7 @@ class ReviewServiceTest {
         ReviewDto result = reviewService.updateReview(savedReviewDto);
         assertEquals(savedReviewDto, result);
     }
+
     @Test
     void testUpdateReviewThatDoesNotExist() {
         Mockito.when(reviewMapper.toEntity(savedReviewDto)).thenReturn(savedReview);
@@ -78,6 +81,7 @@ class ReviewServiceTest {
         List<ReviewDto> result = reviewService.getAllReviewsByProductId(1L);
         assertEquals(reviewDtos, result);
     }
+
     @Test
     void testGetAllReviewsByProductIdWhenProductNotExist() {
         List<Review> reviews = List.of(savedReview);
@@ -95,14 +99,11 @@ class ReviewServiceTest {
         reviewService.deleteReview(1L);
         verify(reviewRepository, times(1)).deleteById(1L);
     }
+
     @Test
     void testDeleteReviewWhenIdNotExist() {
         Mockito.when(reviewRepository.existsById(1L)).thenReturn(false);
         assertThrows(ResourceNotFoundException.class, () -> reviewService.deleteReview(1L));
 
-    }
-
-    @Test
-    void getReviewsByUserId() {
     }
 }

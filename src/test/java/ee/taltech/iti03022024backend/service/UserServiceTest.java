@@ -17,9 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class UserServiceTest {
     @InjectMocks
@@ -71,6 +73,7 @@ class UserServiceTest {
         assertEquals(savedUserDto, updatedUser);
 
     }
+
     @Test
     void testUpdateUserThatNotExist() {
         Mockito.when(userMapper.toEntity(savedUserDto)).thenReturn(savedUser);
@@ -87,6 +90,7 @@ class UserServiceTest {
         userService.deleteUser(1L);
         verify(userRepository, times(1)).deleteById(1L);
     }
+
     @Test
     void testDeleteUserThatNotExist() {
         Mockito.when(userRepository.existsById(1L)).thenReturn(false);
@@ -101,6 +105,7 @@ class UserServiceTest {
         UserDto result = userService.getUserByUsername("anton");
         assertEquals(savedUserDto, result);
     }
+
     @Test
     void testGetUserByUsernameThatNotExist() {
         Mockito.when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
@@ -116,6 +121,7 @@ class UserServiceTest {
         UserDto result = userService.getUserByIdWithProducts(1L);
         assertEquals(savedUserDto, result);
     }
+
     @Test
     void testGetUserByIdWithProductsThatNotExist() {
         Mockito.when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
@@ -130,6 +136,7 @@ class UserServiceTest {
         UserDto result = userService.getUserByIdWithReviews(1L);
         assertEquals(savedUserDto, result);
     }
+
     @Test
     void testGetUserByIdWithReviewsThatNotExist() {
         Mockito.when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
@@ -151,6 +158,7 @@ class UserServiceTest {
         UserDto result = userService.getUserById(1L);
         assertEquals(savedUserDto, result);
     }
+
     @Test
     void testGetUserByIdThatNotExist() {
         Mockito.when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
@@ -164,6 +172,7 @@ class UserServiceTest {
         User result = userService.getUserEntityById(1L);
         assertEquals(savedUser, result);
     }
+
     @Test
     void testGetUserEntityByIdThatNotExist() {
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.empty());

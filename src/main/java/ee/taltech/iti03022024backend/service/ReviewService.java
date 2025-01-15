@@ -16,6 +16,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class ReviewService {
+    public static final String NOT_FOUND = " not found";
     private final ReviewRepository reviewRepository;
     private final ProductService productService;
     private final ReviewMapper reviewMapper;
@@ -45,7 +46,7 @@ public class ReviewService {
             Review oldReview = reviewRepository.findById(review.getId())
                     .orElseThrow(() -> {
                         log.warn("Review with id {} not found", review.getId());
-                        return new ResourceNotFoundException("Review with id " + review.getId() + " not found");
+                        return new ResourceNotFoundException("Review with id " + review.getId() + NOT_FOUND);
                     });
             reviewEntity.setUser(oldReview.getUser());
             reviewEntity.setProduct(oldReview.getProduct());
@@ -63,7 +64,7 @@ public class ReviewService {
         log.info("Fetching all reviews for productId: {}", productId);
         if (!productService.existsById(productId)) {
             log.warn("Product with id {} not found", productId);
-            throw new ResourceNotFoundException("Product with id " + productId + " not found");
+            throw new ResourceNotFoundException("Product with id " + productId + NOT_FOUND);
         }
 
         List<Review> reviews = reviewRepository.findAllByProductId(productId);
@@ -76,7 +77,7 @@ public class ReviewService {
         log.info("Attempting to delete review with id: {}", id);
         if (!reviewRepository.existsById(id)) {
             log.warn("Review with id {} not found", id);
-            throw new ResourceNotFoundException("Review with id " + id + " not found");
+            throw new ResourceNotFoundException("Review with id " + id + NOT_FOUND);
         }
         reviewRepository.deleteById(id);
         log.info("Successfully deleted review with id: {}", id);

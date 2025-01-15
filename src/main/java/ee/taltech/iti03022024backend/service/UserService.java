@@ -68,7 +68,7 @@ public class UserService {
         log.info("Attempting to delete user with id: {}", id);
         if (!userRepository.existsById(id)) {
             log.warn(USER_WITH_ID + id + NOT_FOUND);
-            throw new ResourceNotFoundException("User to delete with id " + id + " not found");
+            throw new ResourceNotFoundException("User to delete with id " + id + NOT_FOUND);
         }
         userRepository.deleteById(id);
         log.info("Successfully deleted user with id: {}", id);

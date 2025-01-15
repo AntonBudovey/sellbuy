@@ -3,7 +3,6 @@ package ee.taltech.iti03022024backend.service;
 import ee.taltech.iti03022024backend.entity.Product;
 import ee.taltech.iti03022024backend.exception.ResourceNotFoundException;
 import ee.taltech.iti03022024backend.repository.ProductRepository;
-import ee.taltech.iti03022024backend.repository.specification.ProductSpecification;
 import ee.taltech.iti03022024backend.web.dto.ProductDto;
 import ee.taltech.iti03022024backend.web.dto.pagination.ProductSearchCriteria;
 import ee.taltech.iti03022024backend.web.mapper.ProductMapper;
@@ -17,14 +16,19 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class ProductServiceTest {
     private Product product;
@@ -83,7 +87,6 @@ class ProductServiceTest {
         ProductSearchCriteria criteria = new ProductSearchCriteria(0, 10, 5.0, 20.0, "ASC");
 
 
-
         Page<Product> productPage = new PageImpl<>(products);
 
 
@@ -94,7 +97,6 @@ class ProductServiceTest {
 
         // Act
         Page<ProductDto> result = productService.getAllProducts(criteria);
-
 
 
         // Assert
@@ -115,6 +117,7 @@ class ProductServiceTest {
         assertEquals(savedProductDto, result);
 
     }
+
     @Test
     void testGetProductByIdWithIdNotExist() {
         //Mock
@@ -155,6 +158,7 @@ class ProductServiceTest {
         productService.deleteProduct(1L);
         verify(productRepository, times(1)).deleteById(1L);
     }
+
     @Test
     void testDeleteProductWithNotExistingId() {
         Mockito.when(productRepository.existsById(1L)).thenReturn(false);

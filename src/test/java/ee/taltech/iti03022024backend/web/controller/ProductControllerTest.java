@@ -1,14 +1,9 @@
 package ee.taltech.iti03022024backend.web.controller;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.taltech.iti03022024backend.AbstractIntegrationTest;
 import ee.taltech.iti03022024backend.entity.Product;
 import ee.taltech.iti03022024backend.entity.User;
-import ee.taltech.iti03022024backend.entity._enum.Role;
 import ee.taltech.iti03022024backend.repository.CategoryRepository;
 import ee.taltech.iti03022024backend.repository.ProductRepository;
 import ee.taltech.iti03022024backend.repository.ReviewRepository;
@@ -26,25 +21,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
@@ -110,8 +101,8 @@ class ProductControllerTest extends AbstractIntegrationTest {
         ProductDto productDto = new ProductDto(null, "Title", "Description", 5.99, false, null, null);
         String productJson = objectMapper.writeValueAsString(productDto);
         String response = mvc.perform(post("/api/v1/products").with(user(myUser))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(productJson))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productJson))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -119,8 +110,8 @@ class ProductControllerTest extends AbstractIntegrationTest {
         ProductDto productResponse = objectMapper.readValue(response, ProductDto.class);
         productResponse.setTitle("updatedTitle");
         mvc.perform(put("/api/v1/products").with(user(myUser))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(productResponse)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productResponse)))
                 .andExpect(status().isOk());
 
         mvc.perform(get("/api/v1/products/" + productResponse.getId()).with(user(myUser)))
@@ -130,7 +121,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testGetAllProductsSuccess() throws Exception{
+    void testGetAllProductsSuccess() throws Exception {
         ProductDto productDto = new ProductDto(null, "Title", "Description", 5.99, false, null, null);
         String productJson = objectMapper.writeValueAsString(productDto);
         mvc.perform(post("/api/v1/products").with(user(myUser))
@@ -181,7 +172,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
                 objectMapper.getTypeFactory().constructParametricType(List.class, ProductDto.class));
         assertEquals(1, products.size());
         assertEquals("Title", products.get(0).getTitle());
-}
+    }
 
     @Test
     void testDeleteProductSuccess() throws Exception {
@@ -201,7 +192,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testCreateCategorySuccess() throws Exception{
+    void testCreateCategorySuccess() throws Exception {
         CategoryDto dto = new CategoryDto(null, "test");
         mvc.perform(post("/api/v1/categories").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)).with(user(myUser)))
@@ -209,7 +200,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testGetAllCategoriesSuccess() throws Exception{
+    void testGetAllCategoriesSuccess() throws Exception {
         CategoryDto dto = new CategoryDto(null, "test");
         mvc.perform(post("/api/v1/categories").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)).with(user(myUser)))
@@ -224,7 +215,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testDeleteCategorySuccess() throws Exception{
+    void testDeleteCategorySuccess() throws Exception {
         CategoryDto dto = new CategoryDto(null, "test");
         String response = mvc.perform(post("/api/v1/categories").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)).with(user(myUser)))
@@ -237,7 +228,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testAddProductToCategorySuccess() throws Exception{
+    void testAddProductToCategorySuccess() throws Exception {
         CategoryDto dto = new CategoryDto(null, "test");
         String response = mvc.perform(post("/api/v1/categories").with(user(myUser)).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)).with(user(myUser)))
@@ -312,7 +303,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testDeleteReviewSuccess() throws Exception{
+    void testDeleteReviewSuccess() throws Exception {
         String response2 = mvc.perform(post("/api/v1/products").with(user(myUser)).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new ProductDto(null, "Title", "Description", 5.99, false, null, null))))
                 .andReturn().getResponse().getContentAsString();
@@ -331,6 +322,7 @@ class ProductControllerTest extends AbstractIntegrationTest {
     void testDeleteReviewThatNotExists() throws Exception {
         mvc.perform(delete("/api/v1/reviews/1").with(user(myUser))).andExpect(status().isNotFound());
     }
+
     @Test
     void testDeleteReviewWithoutAuthorization() throws Exception {
         String response2 = mvc.perform(post("/api/v1/products").with(user(myUser)).contentType(MediaType.APPLICATION_JSON)
@@ -400,9 +392,8 @@ class ProductControllerTest extends AbstractIntegrationTest {
     }
 
 
-
     @Test
-    void testUpdateUserSuccess() throws Exception{
+    void testUpdateUserSuccess() throws Exception {
         UserDto userDto = new UserDto(null, "test", "test@mail.com", "1", null);
         String userJson = objectMapper.writeValueAsString(userDto);
         String result = userJson.substring(0, userJson.length() - 1) + ",\"password\": \"1\"}";
@@ -417,8 +408,8 @@ class ProductControllerTest extends AbstractIntegrationTest {
         userJson = objectMapper.writeValueAsString(user);
         result = userJson.substring(0, userJson.length() - 1) + ",\"password\": \"1\"}";
         response = mvc.perform(put("/api/v1/users").header("Authorization", "Bearer " + jwt)
-                .contentType(MediaType.APPLICATION_JSON).content(result))
-                        .andReturn().getResponse().getContentAsString();
+                        .contentType(MediaType.APPLICATION_JSON).content(result))
+                .andReturn().getResponse().getContentAsString();
         assertEquals("email@mail.com", objectMapper.readValue(response, UserDto.class).getEmail());
         assertEquals("test", objectMapper.readValue(response, UserDto.class).getUsername());
         mvc.perform(delete("/api/v1/users/" + user.getId()).header("Authorization", "Bearer " + jwt)).andExpect(status().isNoContent());
@@ -453,11 +444,14 @@ class ProductControllerTest extends AbstractIntegrationTest {
         String response = mvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON).content(result))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
         UserDto user = objectMapper.readValue(response, UserDto.class);
+
         JwtRequest request = new JwtRequest("test", "1");
         response = mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(request)))
                 .andReturn().getResponse().getContentAsString();
         String jwt = objectMapper.readValue(response, JwtResponse.class).getRefreshToken();
+
         mvc.perform(delete("/api/v1/users/" + user.getId()).header("Authorization", "Bearer " + jwt)).andExpect(status().isNoContent());
+        mvc.perform(get("/api/v1/users/" + user.getId()).with(user(myUser))).andExpect(status().isNotFound());
     }
 
     @Test
