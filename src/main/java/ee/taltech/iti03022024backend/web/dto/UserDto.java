@@ -6,11 +6,13 @@ import ee.taltech.iti03022024backend.web.dto.validation.OnUpdate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
 @Schema(description = "User")
+@AllArgsConstructor
 public class UserDto {
     @NotNull(message = "id cannot be null", groups = {OnUpdate.class})
     private Long id;

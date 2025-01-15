@@ -28,39 +28,39 @@ public class Iti03022024BackendApplication {
         SpringApplication.run(Iti03022024BackendApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner startup(CategoryRepository categoryRepository) {
-
-        return args -> {
-            Faker faker = new Faker();
-            for (int i = 0; i < 50; i++) {
-                Product product = new Product();
-                product.setPrice((double) i);
-                product.setTitle(faker.book().title());
-                product.setDescription(faker.chuckNorris().fact());
-                product.setSoldOut(false);
-                productRepository.save(product);
-            }
-            Product product = new Product();
-            product.setTitle("Hoodie");
-            product.setPrice(10d);
-            product.setSoldOut(false);
-            product.setId(51L);
-            productRepository.save(product);
-
-            Category category = new Category();
-            category.setId(1L);
-            category.setName("Clothing");
-            categoryRepository.save(category);
-            User user = new User();
-            user.setUsername("anton");
-            user.setEmail("email1");
-            user.setPassword("$2a$12$4PdxKUC1NZN9cX4WRB4kP.KrxD98xWAmZ12Koy0zTyVLEifnnhFIO");
-            user.setRoles(Set.of(Role.ROLE_USER));
-            userRepository.save(user);
-
-
-        };
-    }
+//    @Bean
+//    public CommandLineRunner startup(CategoryRepository categoryRepository) {
+//
+//        return args -> {
+//            Faker faker = new Faker();
+//            for (int i = 0; i < 50; i++) {
+//                Product product = new Product();
+//                product.setPrice((double) i);
+//                product.setTitle(faker.book().title());
+//                product.setDescription(faker.chuckNorris().fact());
+//                product.setSoldOut(false);
+//                productRepository.save(product);
+//            }
+//            Product product = new Product();
+//            product.setTitle("Hoodie");
+//            product.setPrice(10d);
+//            product.setSoldOut(false);
+//            product.setId(51L);
+//            productRepository.save(product);
+//
+//            Category category = new Category();
+//            category.setId(1L);
+//            category.setName("Clothing");
+//            categoryRepository.save(category);
+//            User user = new User();
+//            user.setUsername("anton");
+//            user.setEmail("email1");
+//            user.setPassword("$2a$12$4PdxKUC1NZN9cX4WRB4kP.KrxD98xWAmZ12Koy0zTyVLEifnnhFIO");
+//            user.setRoles(Set.of(Role.ROLE_USER));
+//            userRepository.save(user);
+//
+//
+//        };
+//    }
 
 }

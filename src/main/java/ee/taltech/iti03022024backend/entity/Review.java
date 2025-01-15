@@ -10,7 +10,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,6 +20,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "reviews")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Review implements Serializable {
 
     @Id

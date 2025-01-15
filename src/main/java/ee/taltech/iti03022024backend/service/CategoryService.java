@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -76,18 +77,18 @@ public class CategoryService {
             });
 
             Product product = productMapper.toEntity(productService.getProductById(productId));
+            if (category.getProducts() == null) {
+                category.setProducts(new ArrayList<>());
+            }
             category.getProducts().add(product);
+            categoryRepository.save(category);
             product.getCategories().add(category);
             log.info("Added product with id {} to category with id {}", productId, categoryId);
 
-            categoryRepository.save(category);
             productService.updateProduct(productMapper.toDto(product));
             log.info("Successfully saved category and updated product");
         } catch (ResourceNotFoundException e) {
             log.error("Error: Resource not found - {}", e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error occurred while adding product with id {} to category with id {}", productId, categoryId, e);
             throw e;
         }
         log.info("Added product with id {} to category with id {}", productId, categoryId);

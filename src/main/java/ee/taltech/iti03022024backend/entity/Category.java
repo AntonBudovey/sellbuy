@@ -12,7 +12,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.IOException;
@@ -22,6 +24,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "categories")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,

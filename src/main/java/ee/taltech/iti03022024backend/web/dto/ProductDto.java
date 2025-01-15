@@ -5,13 +5,16 @@ import ee.taltech.iti03022024backend.web.dto.validation.OnUpdate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
 @Data
 @Schema(description = "Product")
+@AllArgsConstructor
 public class ProductDto {
     @NotNull(message = "id cannot be null", groups = {OnUpdate.class})
     private Long id;

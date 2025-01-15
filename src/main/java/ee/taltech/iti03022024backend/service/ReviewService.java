@@ -65,31 +65,21 @@ public class ReviewService {
             log.warn("Product with id {} not found", productId);
             throw new ResourceNotFoundException("Product with id " + productId + " not found");
         }
-        try {
-            List<Review> reviews = reviewRepository.findAllByProductId(productId);
-            log.info("Successfully fetched {} reviews for productId: {}", reviews.size(), productId);
-            return reviewMapper.toDto(reviews);
-        } catch (Exception e) {
-            log.error("Error occurred while fetching reviews for productId: {}", productId, e);
-            throw e;
-        }
+
+        List<Review> reviews = reviewRepository.findAllByProductId(productId);
+        log.info("Successfully fetched {} reviews for productId: {}", reviews.size(), productId);
+        return reviewMapper.toDto(reviews);
     }
 
     @Transactional
     public void deleteReview(Long id) {
         log.info("Attempting to delete review with id: {}", id);
-        try {
-            reviewRepository.deleteById(id);
-            log.info("Successfully deleted review with id: {}", id);
-        } catch (Exception e) {
-            log.error("Error occurred while deleting review with id: {}", id, e);
-            throw e;
+        if (!reviewRepository.existsById(id)) {
+            log.warn("Review with id {} not found", id);
+            throw new ResourceNotFoundException("Review with id " + id + " not found");
         }
-    }
-
-    @Transactional(readOnly = true)
-    public List<ReviewDto> getReviewsByUserId(Long userId) {
-        return reviewMapper.toDto(reviewRepository.findByUserId(userId));
+        reviewRepository.deleteById(id);
+        log.info("Successfully deleted review with id: {}", id);
     }
 }
 

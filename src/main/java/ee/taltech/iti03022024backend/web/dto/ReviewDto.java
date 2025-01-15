@@ -6,11 +6,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 @Data
 @Schema(description = "Review")
+@AllArgsConstructor
 public class ReviewDto {
     @NotNull(message = "id cannot be null", groups = {OnUpdate.class})
     private Long id;

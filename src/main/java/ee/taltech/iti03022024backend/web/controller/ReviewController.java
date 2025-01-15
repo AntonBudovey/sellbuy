@@ -42,7 +42,6 @@ public class ReviewController {
 
     @PutMapping
     @Operation(summary = "update review(can review owner and admin)")
-    @PreAuthorize("@customSecurityExpression.canAccessReview(#dto.id)")
     public ReviewDto updateReview(@Validated(OnUpdate.class) @RequestBody ReviewDto dto) {
         return reviewService.updateReview(dto);
     }
@@ -56,7 +55,6 @@ public class ReviewController {
     @DeleteMapping("/{id}")
     @Operation(summary = "delete review by id(can review owner and admin)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("@customSecurityExpression.canAccessReview(#id)")
     public void deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
     }

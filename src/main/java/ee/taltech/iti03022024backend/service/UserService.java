@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @RequiredArgsConstructor(onConstructor = @__(@Lazy))
@@ -31,17 +32,14 @@ public class UserService {
     @Transactional
     public UserDto createUser(UserDto user) {
         log.info("Attempting to create user with username: {}", user.getUsername());
-        try {
-            User userEntity = userMapper.toEntity(user);
-            userEntity.setRoles(Set.of(Role.ROLE_USER));
-            userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-            User createdUser = userRepository.save(userEntity);
-            log.info("Successfully created user with id: {}", createdUser.getId());
-            return userMapper.toDto(createdUser);
-        } catch (Exception e) {
-            log.error("Error occurred while creating user with username: {}", user.getUsername(), e);
-            throw e;
-        }
+        User userEntity = userMapper.toEntity(user);
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.ROLE_USER);
+        userEntity.setRoles(roles);
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
+        User createdUser = userRepository.save(userEntity);
+        log.info("Successfully created user with id: {}", createdUser.getId());
+        return userMapper.toDto(createdUser);
     }
 
     @Transactional
@@ -68,13 +66,12 @@ public class UserService {
     @Transactional
     public void deleteUser(Long id) {
         log.info("Attempting to delete user with id: {}", id);
-        try {
-            userRepository.deleteById(id);
-            log.info("Successfully deleted user with id: {}", id);
-        } catch (Exception e) {
-            log.error("Error occurred while deleting user with id: {}", id, e);
-            throw e;
+        if (!userRepository.existsById(id)) {
+            log.warn(USER_WITH_ID + id + NOT_FOUND);
+            throw new ResourceNotFoundException("User to delete with id " + id + " not found");
         }
+        userRepository.deleteById(id);
+        log.info("Successfully deleted user with id: {}", id);
     }
 
     @Transactional(readOnly = true)
@@ -90,9 +87,6 @@ public class UserService {
             return userMapper.toDto(user);
         } catch (ResourceNotFoundException e) {
             log.error("Resource not found in getUserByUsername: {}", e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error while fetching user by username: {}", username, e);
             throw e;
         }
     }
@@ -111,9 +105,6 @@ public class UserService {
             userDto.setCommonRating(self.getCommonRatingForUser(id));
             log.info("Successfully fetched user with id {} and initialized products", id);
             return userDto;
-        } catch (ResourceNotFoundException e) {
-            log.error("Resource not found in getUserByIdWithProducts: {}", e.getMessage(), e);
-            throw e;
         } catch (Exception e) {
             log.error("Unexpected error while fetching user by id with products: {}", id, e);
             throw e;
@@ -134,9 +125,6 @@ public class UserService {
             return userMapper.toDto(user);
         } catch (ResourceNotFoundException e) {
             log.error("Resource" + NOT_FOUND + ": {}", e.getMessage(), e);
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error while fetching user by id with reviews: {}", id, e);
             throw e;
         }
     }
@@ -165,9 +153,6 @@ public class UserService {
                     });
             log.info("Successfully fetched user with id: {}", userId);
             return userMapper.toDto(user);
-        } catch (ResourceNotFoundException e) {
-            log.error("Resource not found: {}", e.getMessage(), e);
-            throw e;
         } catch (Exception e) {
             log.error("Unexpected error while fetching user by id: {}", userId, e);
             throw e;
@@ -184,9 +169,6 @@ public class UserService {
                     });
             log.info("Successfully fetched user with id: {}", userId);
             return user;
-        } catch (ResourceNotFoundException e) {
-            log.error("Resource not found: {}", e.getMessage(), e);
-            throw e;
         } catch (Exception e) {
             log.error("Unexpected error while fetching user by id: {}", userId, e);
             throw e;

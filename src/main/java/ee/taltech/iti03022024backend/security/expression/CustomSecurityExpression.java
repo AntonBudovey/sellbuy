@@ -33,11 +33,4 @@ public class CustomSecurityExpression {
                 || user.getRoles().contains(Role.ROLE_ADMIN);
     }
 
-    public boolean canAccessReview(Long reviewId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        List<ReviewDto> reviewDtos = reviewService.getAllReviewsByProductId(user.getId());
-        return reviewDtos.stream().map(ReviewDto::getId).toList().contains(reviewId)
-                || user.getRoles().contains(Role.ROLE_ADMIN);
-    }
 }
