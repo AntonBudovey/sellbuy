@@ -16,14 +16,6 @@ AliExpress.
 * Swagger 2.6.0 (for API documentation)
 * MapStruct 1.6.2 (for object mapping)
 
-#### Frontend
-
-* React 18.3.1
-* Vite 5.4.8
-* Tailwind CSS 3.4.14
-* Axios 1.7.7
-* React Router 6.27.0
-
 #### Other
 
 * Docker
@@ -131,25 +123,6 @@ Alternatively, you can use Maven to run the backend directly:
 ```bash
 .\mvnw spring-boot:run
 ```
-
-### Running the Frontend (React with Vite)
-
-1. Clone the project from GitLab.<br>
-   https://gitlab.cs.taltech.ee/anbudo/iti0302-2024-frontend.git
-2. Install the necessary dependencies using npm or yarn:
-
-```bash
-npm install  # or yarn install
-```
-
-3. Run the frontend app locally in development mode:
-
-```bash
-npm run dev  # or yarn dev
-```
-
-The React app will be running on http://localhost:3000, and it will interact with the backend through the API URL
-provided in the .env file.
 
 ## Running Docker Containers for Both Backend and Frontend
 
